@@ -46,7 +46,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
         if (date.equals(localDate)) {
 //            holder.parentView.setBackgroundColor(Color.rgb(238,238,238));
 //            holder.parentView.setBackground(new CircleDrawable(Color.rgb(238,238,238), Color.rgb(238,238,238), 0));
-            holder.parentView.setBackgroundDrawable(new CircleDrawable(Color.rgb(238, 238, 238), Color.rgb(238, 238, 238), 50));
+            holder.parentView.setBackgroundDrawable(new CurrentDayCircleDrawable(Color.rgb(179, 224, 255), Color.rgb(179, 224, 255), 50));
         }
 
         if (date.getMonth().equals(localDate.getMonth())) {
@@ -54,9 +54,9 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
         } else {
             holder.dayOfMonth.setTextColor(Color.LTGRAY);
         }
-//        if (date.getDayOfWeek().getValue() == 4) {
-//            holder.imageView.setImageDrawable(new CircleDrawable(Color.RED, Color.BLACK, 8));
-//        }
+        if (date.getDayOfMonth() == 4) {
+            holder.imageView.setImageDrawable(new CircleDrawable(Color.rgb(132, 202, 250), Color.rgb(132, 202, 250), 4));
+        }
     }
 
     @Override

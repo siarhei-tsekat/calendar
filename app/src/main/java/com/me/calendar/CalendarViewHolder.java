@@ -20,7 +20,6 @@ public class CalendarViewHolder extends RecyclerView.ViewHolder implements View.
     private final ArrayList<LocalDate> days;
     public final View parentView;
     public final TextView dayOfMonth;
-    public final ImageView imageView;
     private final CalendarAdapter.OnItemClickListener onItemClickListener;
 
 
@@ -31,7 +30,6 @@ public class CalendarViewHolder extends RecyclerView.ViewHolder implements View.
         this.dayOfMonth = itemView.findViewById(R.id.cellDayText);
         this.onItemClickListener = onItemClickListener;
         itemView.setOnClickListener(this);
-        imageView = itemView.findViewById(R.id.circleImage);
     }
 
     @Override

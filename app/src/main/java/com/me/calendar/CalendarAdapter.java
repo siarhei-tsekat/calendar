@@ -44,18 +44,13 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
         holder.dayOfMonth.setText(String.valueOf(date.getDayOfMonth()));
 
         if (date.equals(localDate)) {
-//            holder.parentView.setBackgroundColor(Color.rgb(238,238,238));
-//            holder.parentView.setBackground(new CircleDrawable(Color.rgb(238,238,238), Color.rgb(238,238,238), 0));
-            holder.parentView.setBackgroundDrawable(new CurrentDayCircleDrawable(Color.rgb(179, 224, 255), Color.rgb(179, 224, 255), 50));
+            holder.parentView.setBackgroundDrawable(new CircleDrawable(Color.rgb(179, 224, 255), Color.rgb(179, 224, 255), 25));
         }
 
         if (date.getMonth().equals(localDate.getMonth())) {
             holder.dayOfMonth.setTextColor(Color.BLACK);
         } else {
             holder.dayOfMonth.setTextColor(Color.LTGRAY);
-        }
-        if (date.getDayOfMonth() == 4) {
-            holder.imageView.setImageDrawable(new CircleDrawable(Color.rgb(132, 202, 250), Color.rgb(132, 202, 250), 4));
         }
     }
 

@@ -13,30 +13,46 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.me.calendar.App;
 import com.me.calendar.CalendarUtils;
 import com.me.calendar.Event;
 import com.me.calendar.EventEditActivity;
 import com.me.calendar.HourAdapter;
 import com.me.calendar.HourEvent;
 import com.me.calendar.R;
-import com.me.calendar.repository.dao.EventsDao;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Optional;
 
 public class DayFragment extends Fragment {
+
+    private static final String ARG_LOCAL_DATE = "DayFragment.localDate";
 
     private TextView monthDayTex;
     private TextView dayOfWeekTextView;
     private ListView hourListView;
+    private LocalDate localDate;
 
-    private Button prevDayBtn;
-    private Button nextDayBtn;
     private Button addEventBtn;
+
+    public static Fragment newInstance(LocalDate localDate) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_LOCAL_DATE, localDate);
+        DayFragment dayFragment = new DayFragment();
+        dayFragment.setArguments(args);
+        return dayFragment;
+    }
+
+    private DayFragment() {
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        localDate = (LocalDate) getArguments().getSerializable(ARG_LOCAL_DATE);
+    }
 
     @Nullable
     @Override
@@ -51,30 +67,29 @@ public class DayFragment extends Fragment {
         monthDayTex = view.findViewById(R.id.monthDayText);
         dayOfWeekTextView = view.findViewById(R.id.dayOfWeeTextView);
         hourListView = view.findViewById(R.id.hourListView);
-        prevDayBtn = view.findViewById(R.id.prev_day_btn);
-        nextDayBtn = view.findViewById(R.id.next_day_btn);
         addEventBtn = view.findViewById(R.id.add_event_btn_day_view);
 
-        prevDayBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CalendarUtils.selectedDate = CalendarUtils.selectedDate.minusDays(1);
-                setDayView();
-            }
-        });
-
-        nextDayBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CalendarUtils.selectedDate = CalendarUtils.selectedDate.plusDays(1);
-                setDayView();
-            }
-        });
+//        prevDayBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                CalendarUtils.selectedDate = CalendarUtils.selectedDate.minusDays(1);
+//                setDayView();
+//            }
+//        });
+//
+//        nextDayBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                CalendarUtils.selectedDate = CalendarUtils.selectedDate.plusDays(1);
+//                setDayView();
+//            }
+//        });
 
         addEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), EventEditActivity.class));
+                Intent intent = EventEditActivity.newInstance(getActivity(), localDate);
+                startActivity(intent);
             }
         });
     }
@@ -86,8 +101,8 @@ public class DayFragment extends Fragment {
     }
 
     private void setDayView() {
-        monthDayTex.setText(CalendarUtils.monthDayFromDate(CalendarUtils.selectedDate));
-        String dayOfWeek = CalendarUtils.selectedDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.getDefault());
+        monthDayTex.setText(CalendarUtils.monthDayFromDate(localDate));
+        String dayOfWeek = localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.getDefault());
         dayOfWeekTextView.setText(dayOfWeek);
         setHourAdapter();
     }
@@ -104,7 +119,7 @@ public class DayFragment extends Fragment {
         for (int hour = 0; hour < 24; hour++) {
 
             LocalTime time = LocalTime.of(hour, 0);
-            ArrayList<Event> events = Event.eventsForDateAndTime(CalendarUtils.selectedDate, time);
+            ArrayList<Event> events = Event.eventsForDateAndTime(localDate, time);
             HourEvent hourEvent = new HourEvent(time, events);
             list.add(hourEvent);
         }

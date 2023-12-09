@@ -3,7 +3,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -14,18 +14,6 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="20dp">
 
-            <Button
-                    android:id="@+id/prev_day_btn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/leftArrow"
-                    android:textColor="@color/black"
-                    android:background="@null"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:textAlignment="center" />
-
             <TextView
                     android:id="@+id/monthDayText"
                     android:layout_width="0dp"
@@ -35,18 +23,6 @@
                     android:textSize="20sp"
                     android:textAlignment="center"
                     android:textColor="@color/black" />
-
-            <Button
-                    android:id="@+id/next_day_btn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/rightArrow"
-                    android:textColor="@color/black"
-                    android:background="@null"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:textAlignment="center" />
         </LinearLayout>
 
         <TextView

@@ -17,6 +17,8 @@ import com.me.calendar.navigation.MonthFragment;
 import com.me.calendar.navigation.SettingsFragment;
 import com.me.calendar.navigation.WeekFragment;
 
+import java.time.LocalDate;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawerLayout;
@@ -37,20 +39,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MonthFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MonthPagerFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_month);
         }
-
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_month) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MonthFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MonthPagerFragment()).commit();
         } else if (item.getItemId() == R.id.nav_week) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WeekFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WeekPagerFragment()).commit();
         } else if (item.getItemId() == R.id.nav_day) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DayFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DayPagerFragment()).commit();
         } else if (item.getItemId() == R.id.nav_settings) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
         } else if (item.getItemId() == R.id.nav_exit) {

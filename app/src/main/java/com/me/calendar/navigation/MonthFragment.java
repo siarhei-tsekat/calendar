@@ -23,14 +23,32 @@ import com.me.calendar.R;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class MonthFragment extends Fragment implements CalendarAdapter.OnItemClickListener {
-    private ViewPager viewPager;
+
+    private static final String ARG_LOCAL_DATE = "MonthFragment.localDate";
 
     private TextView monthYearTex;
     private RecyclerView calendarRecycleView;
-    private Button prevMonthBtn;
-    private Button nextMonthBtn;
+    private LocalDate localDate;
+
+    public static Fragment newInstance(LocalDate localDate) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_LOCAL_DATE, localDate);
+        MonthFragment monthFragment = new MonthFragment();
+        monthFragment.setArguments(args);
+        return monthFragment;
+    }
+
+    private MonthFragment() {
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        localDate = (LocalDate) getArguments().getSerializable(ARG_LOCAL_DATE);
+    }
 
     @Nullable
     @Override
@@ -38,16 +56,15 @@ public class MonthFragment extends Fragment implements CalendarAdapter.OnItemCli
         View view = inflater.inflate(R.layout.fragment_month, container, false);
 
         initWidgets(view);
-        CalendarUtils.selectedDate = LocalDate.now();
         setMonthView();
 
         return view;
     }
 
     private void setMonthView() {
-        monthYearTex.setText(monthYearFromDate(CalendarUtils.selectedDate));
-        ArrayList<LocalDate> daysInMonth = daysInMonthArray();
-        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, this);
+        monthYearTex.setText(monthYearFromDate(localDate));
+        ArrayList<LocalDate> daysInMonth = daysInMonthArray(localDate);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, this, localDate);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 7);
         calendarRecycleView.setLayoutManager(layoutManager);
         calendarRecycleView.setAdapter(calendarAdapter);
@@ -56,31 +73,29 @@ public class MonthFragment extends Fragment implements CalendarAdapter.OnItemCli
     private void initWidgets(View view) {
         calendarRecycleView = view.findViewById(R.id.calendarRecyclerView);
         monthYearTex = view.findViewById(R.id.monthYearTV);
-        prevMonthBtn = view.findViewById(R.id.prev_month_btn);
-        nextMonthBtn = view.findViewById(R.id.next_month_btn);
 
-        prevMonthBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CalendarUtils.selectedDate = CalendarUtils.selectedDate.minusMonths(1);
-                setMonthView();
-            }
-        });
-
-        nextMonthBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CalendarUtils.selectedDate = CalendarUtils.selectedDate.plusMonths(1);
-                setMonthView();
-            }
-        });
+//        prevMonthBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                CalendarUtils.selectedDate = CalendarUtils.selectedDate.minusMonths(1);
+//                setMonthView();
+//            }
+//        });
+//
+//        nextMonthBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                CalendarUtils.selectedDate = CalendarUtils.selectedDate.plusMonths(1);
+//                setMonthView();
+//            }
+//        });
     }
 
     @Override
     public void onItemClick(int position, LocalDate date) {
-        if (date != null) {
-            CalendarUtils.selectedDate = date;
-            setMonthView();
-        }
+//        if (date != null) {
+//            CalendarUtils.selectedDate = date;
+//            setMonthView();
+//        }
     }
 }

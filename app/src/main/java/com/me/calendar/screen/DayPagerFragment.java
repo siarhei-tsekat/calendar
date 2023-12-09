@@ -13,11 +13,12 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.me.calendar.R;
-import com.me.calendar.navigation.MonthFragment;
+import com.me.calendar.navigation.DayFragment;
+import com.me.calendar.navigation.WeekFragment;
 
 import java.time.LocalDate;
 
-public class MonthPagerFragment extends Fragment {
+public class DayPagerFragment extends Fragment {
     private ViewPager viewPager;
     private LocalDate now = LocalDate.now();
     private int currentItem = 50;
@@ -38,13 +39,13 @@ public class MonthPagerFragment extends Fragment {
 
                 if (position > currentItem) {
                     int diff = Math.abs(position - currentItem);
-                    return MonthFragment.newInstance(now.plusMonths(diff));
+                    return DayFragment.newInstance(now.plusDays(diff));
 
                 } else if (position < currentItem) {
                     int diff = Math.abs(currentItem - position);
-                    return MonthFragment.newInstance(now.minusMonths(diff));
+                    return DayFragment.newInstance(now.minusDays(diff));
                 } else {
-                    return MonthFragment.newInstance(now);
+                    return DayFragment.newInstance(now);
                 }
             }
 

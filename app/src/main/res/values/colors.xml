@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#fcfefe</color>
+    <color name="colorPrimaryDark">#fcfefe</color>
+    <color name="primaryBackground">#fcfefe</color>
+    <color name="black">#FF000000</color>
+    <color name="lightRed">#ff5252</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="lightGray">#EEE</color>
+    <color name="textColor">#005792</color>
+    <color name="eventBackColor">#93deff</color>
+    <color name="border_color">#D6D6D6</color>
+    <color name="lavender">#8692f7</color>
+</resources>

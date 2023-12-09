@@ -1,0 +1,16 @@
+<resources>
+
+    <style name="Base.Theme.Calendar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+        <item name="android:colorBackground">@color/primaryBackground</item>
+        <item name="android:buttonStyle">@style/CommonButton</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:statusBarColor">@color/primaryBackground</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.Calendar" parent="Base.Theme.Calendar" />
+
+</resources>

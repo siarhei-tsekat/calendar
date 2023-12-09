@@ -1,20 +1,19 @@
 package com.me.calendar;
 
+import android.app.AlertDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.LocaleList;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.me.calendar.repository.dao.EventsDao;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Optional;
 
 public class EventEditActivity extends AppCompatActivity {
 
@@ -32,6 +31,7 @@ public class EventEditActivity extends AppCompatActivity {
         return intent;
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +40,26 @@ public class EventEditActivity extends AppCompatActivity {
 
         localDate = ((LocalDate) getIntent().getSerializableExtra(EXTRA_LOCAL_DATE));
         time = LocalTime.now();
-        evenDateTextView.setText("Date: " + CalendarUtils.formattedDate(localDate));
-        evenTimeTextView.setText("Time: " + CalendarUtils.formattedTime(time));
+        evenDateTextView.setText(CalendarUtils.formattedDate(localDate));
+        evenTimeTextView.setText(CalendarUtils.formattedTime(time));
+
+        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                time = LocalTime.of(selectedHour, selectedMinute);
+                evenTimeTextView.setText(CalendarUtils.formattedTime(time));
+            }
+        };
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(EventEditActivity.this, AlertDialog.THEME_HOLO_LIGHT, onTimeSetListener, time.getHour(), time.getMinute(), true);
+        timePickerDialog.setTitle("Select time");
+
+        evenTimeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePickerDialog.show();
+            }
+        });
     }
 
     private void initWidgets() {

@@ -14,14 +14,17 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.me.calendar.R;
 import com.me.calendar.navigation.DayFragment;
-import com.me.calendar.navigation.WeekFragment;
 
 import java.time.LocalDate;
 
 public class DayPagerFragment extends Fragment {
     private ViewPager viewPager;
-    private LocalDate now = LocalDate.now();
+    private LocalDate now;
     private int currentItem = 50;
+
+    public DayPagerFragment(LocalDate date) {
+        this.now = date;
+    }
 
     @Nullable
     @Override

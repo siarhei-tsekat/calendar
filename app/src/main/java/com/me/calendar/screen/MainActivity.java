@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (item.getItemId() == R.id.nav_week) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WeekPagerFragment()).commit();
         } else if (item.getItemId() == R.id.nav_day) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DayPagerFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DayPagerFragment(LocalDate.now())).commit();
         } else if (item.getItemId() == R.id.nav_settings) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
         } else if (item.getItemId() == R.id.nav_exit) {

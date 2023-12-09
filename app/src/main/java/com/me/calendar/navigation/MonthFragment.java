@@ -20,6 +20,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.me.calendar.CalendarAdapter;
 import com.me.calendar.CalendarUtils;
 import com.me.calendar.R;
+import com.me.calendar.screen.DayPagerFragment;
+import com.me.calendar.screen.MonthPagerFragment;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -73,29 +75,12 @@ public class MonthFragment extends Fragment implements CalendarAdapter.OnItemCli
     private void initWidgets(View view) {
         calendarRecycleView = view.findViewById(R.id.calendarRecyclerView);
         monthYearTex = view.findViewById(R.id.monthYearTV);
-
-//        prevMonthBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                CalendarUtils.selectedDate = CalendarUtils.selectedDate.minusMonths(1);
-//                setMonthView();
-//            }
-//        });
-//
-//        nextMonthBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                CalendarUtils.selectedDate = CalendarUtils.selectedDate.plusMonths(1);
-//                setMonthView();
-//            }
-//        });
     }
 
     @Override
     public void onItemClick(int position, LocalDate date) {
-//        if (date != null) {
-//            CalendarUtils.selectedDate = date;
-//            setMonthView();
-//        }
+        if (date != null) {
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DayPagerFragment(date)).commit();
+        }
     }
 }

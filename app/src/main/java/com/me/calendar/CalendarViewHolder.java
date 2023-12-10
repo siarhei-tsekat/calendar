@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,17 +18,29 @@ public class CalendarViewHolder extends RecyclerView.ViewHolder implements View.
 
     private final ArrayList<LocalDate> days;
     public final View parentView;
-    public final TextView dayOfMonth;
-    private final CalendarAdapter.OnItemClickListener onItemClickListener;
+    public final TextView dayOfMonthTextView;
 
+    public TextView event_shape_1;
+    public TextView event_shape_2;
+    public TextView event_shape_3;
 
-    public CalendarViewHolder(@NonNull View itemView, CalendarAdapter.OnItemClickListener onItemClickListener, ArrayList<LocalDate> days) {
+    private final OnItemClickListener onItemClickListener;
+
+    public CalendarViewHolder(@NonNull View itemView, OnItemClickListener onItemClickListener, ArrayList<LocalDate> days) {
         super(itemView);
         this.days = days;
         this.parentView = itemView.findViewById(R.id.parentView);
-        this.dayOfMonth = itemView.findViewById(R.id.cellDayText);
+        this.dayOfMonthTextView = itemView.findViewById(R.id.cellDayText);
+
         this.onItemClickListener = onItemClickListener;
         itemView.setOnClickListener(this);
+
+        this.event_shape_1 = itemView.findViewById(R.id.event_shape_1);
+        this.event_shape_2 = itemView.findViewById(R.id.event_shape_2);
+        this.event_shape_3 = itemView.findViewById(R.id.event_shape_3);
+        event_shape_1.setVisibility(View.INVISIBLE);
+        event_shape_2.setVisibility(View.INVISIBLE);
+        event_shape_3.setVisibility(View.INVISIBLE);
     }
 
     @Override

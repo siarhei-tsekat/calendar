@@ -2,6 +2,7 @@ package com.me.calendar;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Month;
 import java.util.ArrayList;
 
 public class Event {
@@ -13,6 +14,35 @@ public class Event {
 
         for (Event event : events) {
             if (event.getDate().equals(date)) {
+                dayEvents.add(event);
+            }
+        }
+        return dayEvents;
+    }
+
+    public static ArrayList<Event> eventsForMonth(LocalDate date) {
+        ArrayList<Event> dayEvents = new ArrayList<>();
+
+        int year = date.getYear();
+        Month month = date.getMonth();
+
+        for (Event event : events) {
+            if (event.getDate().getYear() == year && event.getDate().getMonth().equals(month)) {
+                dayEvents.add(event);
+            }
+        }
+        return dayEvents;
+    }
+
+    // fix me
+    public static ArrayList<Event> eventsForWeek(LocalDate date) {
+        ArrayList<Event> dayEvents = new ArrayList<>();
+
+        int year = date.getYear();
+        Month month = date.getMonth();
+
+        for (Event event : events) {
+            if (event.getDate().getYear() == year && event.getDate().getMonth().equals(month)) {
                 dayEvents.add(event);
             }
         }

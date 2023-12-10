@@ -8,7 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class CalendarUtils {
-//    public static LocalDate selectedDate = LocalDate.now();
 
     public static ArrayList<LocalDate> daysInMonthArray(LocalDate localDate) {
 

@@ -17,17 +17,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.me.calendar.CalendarAdapter;
 import com.me.calendar.CalendarUtils;
+import com.me.calendar.CalendarWeekAdapter;
 import com.me.calendar.Event;
 import com.me.calendar.EventAdapter;
 import com.me.calendar.EventEditActivity;
+import com.me.calendar.OnItemClickListener;
 import com.me.calendar.R;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class WeekFragment extends Fragment implements CalendarAdapter.OnItemClickListener {
+public class WeekFragment extends Fragment implements OnItemClickListener {
 
     private static final String ARG_LOCAL_DATE = "WeekFragment.localDate";
 
@@ -88,10 +89,11 @@ public class WeekFragment extends Fragment implements CalendarAdapter.OnItemClic
     private void setWeekView() {
         monthYearTex.setText(monthYearFromDate(localDate));
         ArrayList<LocalDate> days = CalendarUtils.daysInWeekArray(localDate);
-        CalendarAdapter calendarAdapter = new CalendarAdapter(days, this, localDate);
+        ArrayList<Event> eventsForWeek = Event.eventsForWeek(localDate);
+        CalendarWeekAdapter calendarMonthAdapter = new CalendarWeekAdapter(days, this, localDate, eventsForWeek);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 7);
         calendarRecycleView.setLayoutManager(layoutManager);
-        calendarRecycleView.setAdapter(calendarAdapter);
+        calendarRecycleView.setAdapter(calendarMonthAdapter);
         setEventAdapter();
     }
 

@@ -25,7 +25,21 @@
         <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/fragment_container" />
+                android:id="@+id/fragment_container">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/add_event_fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/add_white_btn"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:backgroundTint="@color/textColor"
+                    app:pressedTranslationZ="12dp"
+                    android:contentDescription="Add event" />
+
+        </FrameLayout>
 
     </LinearLayout>
 

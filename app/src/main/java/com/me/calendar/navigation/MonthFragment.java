@@ -3,6 +3,7 @@ package com.me.calendar.navigation;
 import static com.me.calendar.CalendarUtils.daysInMonthArray;
 import static com.me.calendar.CalendarUtils.monthYearFromDate;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +16,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.me.calendar.CalendarMonthAdapter;
 import com.me.calendar.Event;
+import com.me.calendar.EventEditActivity;
 import com.me.calendar.OnItemClickListener;
 import com.me.calendar.R;
 import com.me.calendar.screen.DayPagerFragment;
@@ -81,7 +84,6 @@ public class MonthFragment extends Fragment implements OnItemClickListener {
         if (date != null) {
             NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
             navigationView.setCheckedItem(R.id.nav_day);
-//            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DayPagerFragment(date)).commit();
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, new DayPagerFragment(date))

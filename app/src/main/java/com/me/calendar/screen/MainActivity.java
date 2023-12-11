@@ -1,7 +1,9 @@
 package com.me.calendar.screen;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -10,18 +12,18 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.me.calendar.EventEditActivity;
 import com.me.calendar.R;
-import com.me.calendar.navigation.DayFragment;
-import com.me.calendar.navigation.MonthFragment;
 import com.me.calendar.navigation.SettingsFragment;
-import com.me.calendar.navigation.WeekFragment;
 
 import java.time.LocalDate;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawerLayout;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MonthPagerFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_month);
         }
+
+        fab = findViewById(R.id.add_event_fab);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = EventEditActivity.newInstance(MainActivity.this, LocalDate.now());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

@@ -2,12 +2,10 @@ package com.me.calendar.navigation;
 
 import static com.me.calendar.CalendarUtils.monthYearFromDate;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,7 +19,6 @@ import com.me.calendar.CalendarUtils;
 import com.me.calendar.CalendarWeekAdapter;
 import com.me.calendar.Event;
 import com.me.calendar.EventAdapter;
-import com.me.calendar.EventEditActivity;
 import com.me.calendar.OnItemClickListener;
 import com.me.calendar.R;
 
@@ -35,8 +32,6 @@ public class WeekFragment extends Fragment implements OnItemClickListener {
     private TextView monthYearTex;
     private RecyclerView calendarRecycleView;
     private ListView eventListView;
-
-    private Button addEventBtn;
     private LocalDate localDate;
 
     public static Fragment newInstance(LocalDate localDate) {
@@ -100,30 +95,5 @@ public class WeekFragment extends Fragment implements OnItemClickListener {
         calendarRecycleView = view.findViewById(R.id.calendarRecyclerView);
         monthYearTex = view.findViewById(R.id.monthYearTV);
         eventListView = view.findViewById(R.id.eventListView);
-        addEventBtn = view.findViewById(R.id.add_event_btn);
-
-//        prevWeekBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                CalendarUtils.selectedDate = CalendarUtils.selectedDate.minusWeeks(1);
-//                setWeekView();
-//            }
-//        });
-//
-//        nextWeekBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                CalendarUtils.selectedDate = CalendarUtils.selectedDate.plusWeeks(1);
-//                setWeekView();
-//            }
-//        });
-
-        addEventBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = EventEditActivity.newInstance(getActivity(), localDate);
-                startActivity(intent);
-            }
-        });
     }
 }

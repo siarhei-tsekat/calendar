@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.navigation.NavigationView;
 import com.me.calendar.CalendarMonthAdapter;
 import com.me.calendar.Event;
 import com.me.calendar.OnItemClickListener;
@@ -78,7 +79,14 @@ public class MonthFragment extends Fragment implements OnItemClickListener {
     @Override
     public void onItemClick(int position, LocalDate date) {
         if (date != null) {
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DayPagerFragment(date)).commit();
+            NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
+            navigationView.setCheckedItem(R.id.nav_day);
+//            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DayPagerFragment(date)).commit();
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new DayPagerFragment(date))
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 }

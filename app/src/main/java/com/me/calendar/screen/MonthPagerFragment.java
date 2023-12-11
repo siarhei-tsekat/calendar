@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -20,7 +19,7 @@ import java.time.LocalDate;
 public class MonthPagerFragment extends Fragment {
     private ViewPager viewPager;
     private LocalDate now = LocalDate.now();
-    private int currentItem = 50;
+    private int currentItem = 12;
 
     @Nullable
     @Override
@@ -29,9 +28,9 @@ public class MonthPagerFragment extends Fragment {
 
         viewPager = view.findViewById(R.id.fragment_view_pager);
 
-        FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
+//        FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
 
-        viewPager.setAdapter(new FragmentStatePagerAdapter(supportFragmentManager) {
+        viewPager.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
             @NonNull
             @Override
             public Fragment getItem(int position) {
@@ -50,7 +49,7 @@ public class MonthPagerFragment extends Fragment {
 
             @Override
             public int getCount() {
-                return 100;
+                return 24;
             }
 
         });

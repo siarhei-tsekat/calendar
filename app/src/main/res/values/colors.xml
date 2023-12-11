@@ -12,4 +12,5 @@
     <color name="eventBackColor">#005792</color>
     <color name="border_color">#D6D6D6</color>
     <color name="lavender">#8692f7</color>
+    <color name="textColorDisabled">#C9C1C1</color>
 </resources>

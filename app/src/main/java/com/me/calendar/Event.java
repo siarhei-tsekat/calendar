@@ -1,11 +1,14 @@
 package com.me.calendar;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.ArrayList;
 
-public class Event {
+public class Event implements Parcelable {
 
     public static ArrayList<Event> events = new ArrayList<>();
 
@@ -64,15 +67,20 @@ public class Event {
         return dayEvents;
     }
 
+    private long eventId;
     private String name;
     private LocalDate date;
     private LocalTime time;
 
-
-    public Event(String name, LocalDate date, LocalTime time) {
+    public Event(long eventId, String name, LocalDate date, LocalTime time) {
+        this.eventId = eventId;
         this.name = name;
         this.date = date;
         this.time = time;
+    }
+
+    public long getEventId() {
+        return eventId;
     }
 
     public String getName() {
@@ -97,5 +105,44 @@ public class Event {
 
     public void setTime(LocalTime time) {
         this.time = time;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public Event(Parcel in) {
+        readFromParcel(in);
+    }
+
+    public static final Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
+
+        @Override
+        public Event createFromParcel(Parcel source) {
+            return new Event(source);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[0];
+        }
+    };
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeLong(eventId);
+        dest.writeString(name);
+        dest.writeSerializable(date);
+        dest.writeSerializable(time);
+    }
+
+    private void readFromParcel(Parcel in) {
+
+        eventId = in.readLong();
+        name = in.readString();
+        date = (LocalDate) in.readSerializable();
+        time = (LocalTime) in.readSerializable();
     }
 }

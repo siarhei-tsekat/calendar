@@ -108,8 +108,9 @@ public class DayFragment extends Fragment {
     }
 
     private void setHourAdapter() {
-        HourAdapter hourAdapter = new HourAdapter(getActivity().getApplicationContext(), hourEventList());
+        HourAdapter hourAdapter = new HourAdapter(getActivity(), hourEventList());
         hourListView.setAdapter(hourAdapter);
+        hourListView.setSelection(8);
     }
 
     private ArrayList<HourEvent> hourEventList() {

@@ -1,6 +1,7 @@
 package com.me.calendar;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,28 @@ public class HourAdapter extends ArrayAdapter<HourEvent> {
         TextView event1 = convertView.findViewById(R.id.event1);
         TextView event2 = convertView.findViewById(R.id.event2);
         TextView event3 = convertView.findViewById(R.id.event3);
+
+        event1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = EventEditActivity.newInstance(HourAdapter.this.getContext(), events.get(0));
+                HourAdapter.this.getContext().startActivity(intent);
+            }
+        });
+        event2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = EventEditActivity.newInstance(HourAdapter.this.getContext(), events.get(1));
+                HourAdapter.this.getContext().startActivity(intent);
+            }
+        });
+        event3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = EventEditActivity.newInstance(HourAdapter.this.getContext(), events.get(2));
+                HourAdapter.this.getContext().startActivity(intent);
+            }
+        });
 
         if (events.size() == 0) {
             hideEvent(event1);

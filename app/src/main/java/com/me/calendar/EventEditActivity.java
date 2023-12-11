@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -17,13 +19,23 @@ import java.time.LocalTime;
 
 public class EventEditActivity extends AppCompatActivity {
 
+    private Event editEvent;
+
+    enum Mode {
+        NEW, EDIT;
+    }
+
+    private Mode mode;
+
     public static final String EXTRA_LOCAL_DATE = "EventEditActivity.local_date";
+    public static final String EXTRA_EVENT = "EventEditActivity.event";
 
     private EditText eventNameEditText;
     private TextView evenDateTextView;
     private TextView evenTimeTextView;
     private LocalTime time;
     private LocalDate localDate;
+    private Button deleteEventBtn;
 
     public static Intent newInstance(Context context, LocalDate localDate) {
         Intent intent = new Intent(context, EventEditActivity.class);
@@ -31,6 +43,11 @@ public class EventEditActivity extends AppCompatActivity {
         return intent;
     }
 
+    public static Intent newInstance(Context context, Event event) {
+        Intent intent = new Intent(context, EventEditActivity.class);
+        intent.putExtra(EXTRA_EVENT, event);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +55,25 @@ public class EventEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_edit);
         initWidgets();
 
-        localDate = ((LocalDate) getIntent().getSerializableExtra(EXTRA_LOCAL_DATE));
-        time = LocalTime.now();
-        evenDateTextView.setText(CalendarUtils.formattedDate(localDate));
-        evenTimeTextView.setText(CalendarUtils.formattedTime(time));
+        if (getIntent().hasExtra(EXTRA_LOCAL_DATE)) {
+            mode = Mode.NEW;
+            localDate = ((LocalDate) getIntent().getSerializableExtra(EXTRA_LOCAL_DATE));
+            time = LocalTime.now();
+            evenDateTextView.setText(CalendarUtils.formattedDate(localDate));
+            evenTimeTextView.setText(CalendarUtils.formattedTime(time));
+            deleteEventBtn.setEnabled(false);
+            deleteEventBtn.setBackgroundColor(Color.LTGRAY);
+
+        } else if (getIntent().hasExtra(EXTRA_EVENT)) {
+
+            editEvent = getIntent().getParcelableExtra(EXTRA_EVENT);
+            localDate = editEvent.getDate();
+            eventNameEditText.setText(editEvent.getName());
+            evenDateTextView.setText(CalendarUtils.formattedDate(editEvent.getDate()));
+            evenTimeTextView.setText(CalendarUtils.formattedTime(editEvent.getTime()));
+            time = editEvent.getTime();
+            mode = Mode.EDIT;
+        }
 
         TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -66,14 +98,30 @@ public class EventEditActivity extends AppCompatActivity {
         eventNameEditText = findViewById(R.id.eventNameEditText);
         evenDateTextView = findViewById(R.id.eventDateTextView);
         evenTimeTextView = findViewById(R.id.eventTimeTextView);
+        deleteEventBtn = findViewById(R.id.deleteEventBtn);
+        deleteEventBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Event.events.removeIf(ev -> ev.getEventId() == editEvent.getEventId());
+                finish();
+            }
+        });
     }
 
     public void saveEventAction(View view) {
 
         String eventName = eventNameEditText.getText().toString();
-        Event event = new Event(eventName, localDate, time);
-        Event.events.add(event);
 
+        if (mode == Mode.NEW) {
+            Event event = new Event(System.nanoTime(), eventName, localDate, time);
+            Event.events.add(event);
+        } else if (mode == Mode.EDIT) {
+            editEvent.setDate(localDate);
+            editEvent.setTime(time);
+            editEvent.setName(eventName);
+            Event.events.removeIf(ev -> ev.getEventId() == editEvent.getEventId());
+            Event.events.add(editEvent);
+        }
         finish();
     }
 

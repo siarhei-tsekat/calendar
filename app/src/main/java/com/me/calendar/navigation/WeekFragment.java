@@ -56,7 +56,6 @@ public class WeekFragment extends Fragment implements OnItemClickListener {
         localDate = (LocalDate) getArguments().getSerializable(ARG_LOCAL_DATE);
     }
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

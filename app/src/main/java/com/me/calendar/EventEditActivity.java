@@ -89,6 +89,12 @@ public class EventEditActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        eventNameEditText.requestFocus();
+    }
+
     private void initDatePicker() {
 
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -147,6 +153,9 @@ public class EventEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 saveEvent();
+                Intent intent = new Intent("EventEditActivity.newEventAdded");
+                intent.putExtra("localDate", localDate);
+                sendBroadcast(intent);
                 finish();
             }
         });

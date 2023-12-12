@@ -82,4 +82,8 @@ public class CalendarMonthAdapter extends RecyclerView.Adapter<CalendarViewHolde
     public int getItemCount() {
         return days.size();
     }
+
+    public void update(ArrayList<Event> events) {
+        currentEvents = events;
+    }
 }

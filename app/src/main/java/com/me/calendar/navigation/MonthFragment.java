@@ -3,7 +3,10 @@ package com.me.calendar.navigation;
 import static com.me.calendar.CalendarUtils.daysInMonthArray;
 import static com.me.calendar.CalendarUtils.monthYearFromDate;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +19,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.me.calendar.CalendarMonthAdapter;
 import com.me.calendar.Event;
-import com.me.calendar.EventEditActivity;
 import com.me.calendar.OnItemClickListener;
 import com.me.calendar.R;
 import com.me.calendar.screen.DayPagerFragment;
@@ -35,6 +36,7 @@ public class MonthFragment extends Fragment implements OnItemClickListener {
     private TextView monthYearTex;
     private RecyclerView calendarRecycleView;
     private LocalDate localDate;
+    private CalendarMonthAdapter calendarMonthAdapter;
 
     public static Fragment newInstance(LocalDate localDate) {
         Bundle args = new Bundle();
@@ -51,6 +53,24 @@ public class MonthFragment extends Fragment implements OnItemClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         localDate = (LocalDate) getArguments().getSerializable(ARG_LOCAL_DATE);
+
+        IntentFilter filter = new IntentFilter("EventEditActivity.newEventAdded");
+
+        BroadcastReceiver smsBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                LocalDate localDate = (LocalDate) intent.getSerializableExtra("localDate");
+                calendarMonthAdapter.update(Event.eventsForMonth(localDate));
+                getActivity().runOnUiThread(() -> {
+                    calendarMonthAdapter.notifyDataSetChanged();
+                });
+//                calendarMonthAdapter.notifyItemChanged(5);
+
+//                RecyclerView.ViewHolder viewHolder = calendarRecycleView.findViewHolderForAdapterPosition(5);
+            }
+        };
+
+        getActivity().registerReceiver(smsBroadcastReceiver, filter);
     }
 
     @Nullable
@@ -68,8 +88,9 @@ public class MonthFragment extends Fragment implements OnItemClickListener {
         monthYearTex.setText(monthYearFromDate(localDate));
         ArrayList<LocalDate> daysInMonth = daysInMonthArray(localDate);
         ArrayList<Event> eventsForMonth = Event.eventsForMonth(localDate);
-        CalendarMonthAdapter calendarMonthAdapter = new CalendarMonthAdapter(daysInMonth, this, localDate, eventsForMonth);
+        calendarMonthAdapter = new CalendarMonthAdapter(daysInMonth, this, localDate, eventsForMonth);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 7);
+
         calendarRecycleView.setLayoutManager(layoutManager);
         calendarRecycleView.setAdapter(calendarMonthAdapter);
     }

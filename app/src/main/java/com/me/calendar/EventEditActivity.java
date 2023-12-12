@@ -1,13 +1,17 @@
 package com.me.calendar;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -16,10 +20,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Calendar;
 
 public class EventEditActivity extends AppCompatActivity {
 
     private Event editEvent;
+
+    private DatePickerDialog datePickerDialog;
 
     enum Mode {
         NEW, EDIT;
@@ -36,6 +43,7 @@ public class EventEditActivity extends AppCompatActivity {
     private LocalTime time;
     private LocalDate localDate;
     private Button deleteEventBtn;
+    private Button saveEventBtn;
 
     public static Intent newInstance(Context context, LocalDate localDate) {
         Intent intent = new Intent(context, EventEditActivity.class);
@@ -63,6 +71,7 @@ public class EventEditActivity extends AppCompatActivity {
             evenTimeTextView.setText(CalendarUtils.formattedTime(time));
             deleteEventBtn.setEnabled(false);
             deleteEventBtn.setBackgroundColor(Color.LTGRAY);
+            handleSaveBtnState(false);
 
         } else if (getIntent().hasExtra(EXTRA_EVENT)) {
 
@@ -75,6 +84,39 @@ public class EventEditActivity extends AppCompatActivity {
             mode = Mode.EDIT;
         }
 
+        initDatePicker();
+        initTimePicker();
+
+    }
+
+    private void initDatePicker() {
+
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                localDate = LocalDate.of(year, month, day);
+                evenDateTextView.setText(CalendarUtils.formattedDate(localDate));
+            }
+        };
+
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        datePickerDialog = new DatePickerDialog(this, AlertDialog.THEME_HOLO_LIGHT, dateSetListener, year, month, day);
+
+        evenDateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePickerDialog.show();
+            }
+        });
+    }
+
+    private void initTimePicker() {
         TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
@@ -98,17 +140,59 @@ public class EventEditActivity extends AppCompatActivity {
         eventNameEditText = findViewById(R.id.eventNameEditText);
         evenDateTextView = findViewById(R.id.eventDateTextView);
         evenTimeTextView = findViewById(R.id.eventTimeTextView);
+        saveEventBtn = findViewById(R.id.saveEventBtn);
         deleteEventBtn = findViewById(R.id.deleteEventBtn);
+
+        saveEventBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveEvent();
+                finish();
+            }
+        });
+
         deleteEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Event.events.removeIf(ev -> ev.getEventId() == editEvent.getEventId());
+                deleteEvent();
                 finish();
+            }
+        });
+
+        eventNameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                boolean enabled = s != null && !s.toString().trim().equals("");
+                handleSaveBtnState(enabled);
             }
         });
     }
 
-    public void saveEventAction(View view) {
+    private void handleSaveBtnState(boolean enabled) {
+        if (enabled) {
+            saveEventBtn.setEnabled(true);
+            saveEventBtn.setBackgroundColor(Color.rgb(3, 166, 240));
+        } else {
+            saveEventBtn.setEnabled(false);
+            saveEventBtn.setBackgroundColor(Color.LTGRAY);
+        }
+    }
+
+    private void deleteEvent() {
+        Event.events.removeIf(ev -> ev.getEventId() == editEvent.getEventId());
+    }
+
+    public void saveEvent() {
 
         String eventName = eventNameEditText.getText().toString();
 
@@ -122,7 +206,6 @@ public class EventEditActivity extends AppCompatActivity {
             Event.events.removeIf(ev -> ev.getEventId() == editEvent.getEventId());
             Event.events.add(editEvent);
         }
-        finish();
     }
 
 //    public void saveNewEvent(View view) {

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+            android:id="@+id/save_event_btn"
+            android:icon="@drawable/save_event_item"
+            app:showAsAction="ifRoom"
+            android:title="Edit event" />
+
+    <item
+            android:id="@+id/delete_event_btn"
+            app:showAsAction="collapseActionView"
+            android:title="Delete event" />
+</menu>

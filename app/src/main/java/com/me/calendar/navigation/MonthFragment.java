@@ -25,6 +25,7 @@ import com.me.calendar.Event;
 import com.me.calendar.OnItemClickListener;
 import com.me.calendar.R;
 import com.me.calendar.screen.DayPagerFragment;
+import com.me.calendar.screen.MainActivity;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -54,23 +55,32 @@ public class MonthFragment extends Fragment implements OnItemClickListener {
         super.onCreate(savedInstanceState);
         localDate = (LocalDate) getArguments().getSerializable(ARG_LOCAL_DATE);
 
-        IntentFilter filter = new IntentFilter("EventEditActivity.newEventAdded");
+        IntentFilter filter = new IntentFilter("NewEventActivity.newEventAdded");
 
         BroadcastReceiver smsBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 LocalDate localDate = (LocalDate) intent.getSerializableExtra("localDate");
                 calendarMonthAdapter.update(Event.eventsForMonth(localDate));
-                getActivity().runOnUiThread(() -> {
-                    calendarMonthAdapter.notifyDataSetChanged();
-                });
+
+                if (isAdded()) {
+                    requireActivity().runOnUiThread(() -> {
+                        calendarMonthAdapter.notifyDataSetChanged();
+                    });
+                }
 //                calendarMonthAdapter.notifyItemChanged(5);
 
 //                RecyclerView.ViewHolder viewHolder = calendarRecycleView.findViewHolderForAdapterPosition(5);
             }
         };
 
-        getActivity().registerReceiver(smsBroadcastReceiver, filter);
+        requireActivity().registerReceiver(smsBroadcastReceiver, filter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MainActivity.selectedDate = LocalDate.now();
     }
 
     @Nullable
@@ -103,6 +113,7 @@ public class MonthFragment extends Fragment implements OnItemClickListener {
     @Override
     public void onItemClick(int position, LocalDate date) {
         if (date != null) {
+            MainActivity.selectedDate = date;
             NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
             navigationView.setCheckedItem(R.id.nav_day);
             getActivity().getSupportFragmentManager()

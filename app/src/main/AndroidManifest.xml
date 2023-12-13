@@ -24,7 +24,11 @@
         </activity>
 
         <activity
-                android:name=".EventEditActivity"
+                android:name=".NewEventActivity"
+                android:exported="false" />
+
+        <activity
+                android:name=".EditEventActivity"
                 android:exported="false" />
     </application>
 

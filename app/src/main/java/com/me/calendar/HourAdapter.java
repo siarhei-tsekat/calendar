@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,21 +46,21 @@ public class HourAdapter extends ArrayAdapter<HourEvent> {
         event1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = EventEditActivity.newInstance(HourAdapter.this.getContext(), events.get(0));
+                Intent intent = EditEventActivity.newInstance(HourAdapter.this.getContext(), events.get(0));
                 HourAdapter.this.getContext().startActivity(intent);
             }
         });
         event2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = EventEditActivity.newInstance(HourAdapter.this.getContext(), events.get(1));
+                Intent intent = EditEventActivity.newInstance(HourAdapter.this.getContext(), events.get(1));
                 HourAdapter.this.getContext().startActivity(intent);
             }
         });
         event3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = EventEditActivity.newInstance(HourAdapter.this.getContext(), events.get(2));
+                Intent intent = EditEventActivity.newInstance(HourAdapter.this.getContext(), events.get(2));
                 HourAdapter.this.getContext().startActivity(intent);
             }
         });

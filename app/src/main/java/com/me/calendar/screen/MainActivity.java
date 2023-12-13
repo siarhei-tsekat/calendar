@@ -14,13 +14,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.me.calendar.EventEditActivity;
+import com.me.calendar.NewEventActivity;
 import com.me.calendar.R;
 import com.me.calendar.navigation.SettingsFragment;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    public static LocalDate selectedDate = LocalDate.now();
 
     private DrawerLayout drawerLayout;
     private FloatingActionButton fab;
@@ -32,9 +35,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav);
 
         drawerLayout.addDrawerListener(toggle);
@@ -50,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = EventEditActivity.newInstance(MainActivity.this, LocalDate.now());
+                Intent intent = NewEventActivity.newInstance(MainActivity.this, selectedDate, LocalTime.now());
                 startActivity(intent);
             }
         });

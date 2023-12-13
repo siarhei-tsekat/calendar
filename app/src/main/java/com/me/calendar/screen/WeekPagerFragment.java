@@ -29,9 +29,9 @@ public class WeekPagerFragment extends Fragment {
 
         viewPager = view.findViewById(R.id.fragment_view_pager);
 
-//        FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
 
-        viewPager.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
+        viewPager.setAdapter(new FragmentStatePagerAdapter(supportFragmentManager) {
             @NonNull
             @Override
             public Fragment getItem(int position) {

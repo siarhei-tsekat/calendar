@@ -1,59 +1,50 @@
 package com.me.calendar;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Calendar;
 
-public class EventEditActivity extends AppCompatActivity {
-
-    private Event editEvent;
+public class NewEventActivity extends AppCompatActivity {
 
     private DatePickerDialog datePickerDialog;
+    private MenuItem saveEventMenuItem;
+    private boolean saveEventMenuItemEnabled = false;
 
-    enum Mode {
-        NEW, EDIT;
-    }
-
-    private Mode mode;
-
-    public static final String EXTRA_LOCAL_DATE = "EventEditActivity.local_date";
-    public static final String EXTRA_EVENT = "EventEditActivity.event";
+    public static final String EXTRA_LOCAL_DATE = "NewEventActivity.local_date";
+    public static final String EXTRA_LOCAL_TIME = "NewEventActivity.local_time";
 
     private EditText eventNameEditText;
     private TextView evenDateTextView;
     private TextView evenTimeTextView;
     private LocalTime time;
     private LocalDate localDate;
-    private Button deleteEventBtn;
-    private Button saveEventBtn;
 
-    public static Intent newInstance(Context context, LocalDate localDate) {
-        Intent intent = new Intent(context, EventEditActivity.class);
+    public static Intent newInstance(Context context, LocalDate localDate, LocalTime time) {
+        Intent intent = new Intent(context, NewEventActivity.class);
         intent.putExtra(EXTRA_LOCAL_DATE, localDate);
-        return intent;
-    }
-
-    public static Intent newInstance(Context context, Event event) {
-        Intent intent = new Intent(context, EventEditActivity.class);
-        intent.putExtra(EXTRA_EVENT, event);
+        intent.putExtra(EXTRA_LOCAL_TIME, time);
         return intent;
     }
 
@@ -61,32 +52,64 @@ public class EventEditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_edit);
+
+        Toolbar myToolbar = findViewById(R.id.edit_event_toolbar);
+        setSupportActionBar(myToolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("New Event");
         initWidgets();
 
-        if (getIntent().hasExtra(EXTRA_LOCAL_DATE)) {
-            mode = Mode.NEW;
-            localDate = ((LocalDate) getIntent().getSerializableExtra(EXTRA_LOCAL_DATE));
-            time = LocalTime.now();
-            evenDateTextView.setText(CalendarUtils.formattedDate(localDate));
-            evenTimeTextView.setText(CalendarUtils.formattedTime(time));
-            deleteEventBtn.setEnabled(false);
-            deleteEventBtn.setBackgroundColor(Color.LTGRAY);
-            handleSaveBtnState(false);
-
-        } else if (getIntent().hasExtra(EXTRA_EVENT)) {
-
-            editEvent = getIntent().getParcelableExtra(EXTRA_EVENT);
-            localDate = editEvent.getDate();
-            eventNameEditText.setText(editEvent.getName());
-            evenDateTextView.setText(CalendarUtils.formattedDate(editEvent.getDate()));
-            evenTimeTextView.setText(CalendarUtils.formattedTime(editEvent.getTime()));
-            time = editEvent.getTime();
-            mode = Mode.EDIT;
-        }
+        localDate = ((LocalDate) getIntent().getSerializableExtra(EXTRA_LOCAL_DATE));
+        time = ((LocalTime) getIntent().getSerializableExtra(EXTRA_LOCAL_TIME));
+        evenDateTextView.setText(CalendarUtils.formattedDate(localDate));
+        evenTimeTextView.setText(CalendarUtils.formattedTime(time));
 
         initDatePicker();
         initTimePicker();
+    }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_new_event, menu);
+        saveEventMenuItem = menu.findItem(R.id.done_dark_btn);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        saveEventMenuItem.setEnabled(saveEventMenuItemEnabled);
+        saveEventMenuItem.getIcon().setAlpha(saveEventMenuItemEnabled ? 255 : 50);
+        super.onPrepareOptionsMenu(menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.done_dark_btn) {
+            saveEvent();
+            Intent intent = new Intent("NewEventActivity.newEventAdded");
+            intent.putExtra("localDate", localDate);
+            sendBroadcast(intent);
+
+            InputMethodManager imm = (InputMethodManager) NewEventActivity.this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            View view = NewEventActivity.this.getCurrentFocus();
+//            if (view == null) {
+//                view = new View(activity);
+//            }
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+            finish();
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -131,7 +154,7 @@ public class EventEditActivity extends AppCompatActivity {
             }
         };
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(EventEditActivity.this, AlertDialog.THEME_HOLO_LIGHT, onTimeSetListener, time.getHour(), time.getMinute(), true);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(NewEventActivity.this, AlertDialog.THEME_HOLO_LIGHT, onTimeSetListener, time.getHour(), time.getMinute(), true);
         timePickerDialog.setTitle("Select time");
 
         evenTimeTextView.setOnClickListener(new View.OnClickListener() {
@@ -146,27 +169,6 @@ public class EventEditActivity extends AppCompatActivity {
         eventNameEditText = findViewById(R.id.eventNameEditText);
         evenDateTextView = findViewById(R.id.eventDateTextView);
         evenTimeTextView = findViewById(R.id.eventTimeTextView);
-        saveEventBtn = findViewById(R.id.saveEventBtn);
-        deleteEventBtn = findViewById(R.id.deleteEventBtn);
-
-        saveEventBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveEvent();
-                Intent intent = new Intent("EventEditActivity.newEventAdded");
-                intent.putExtra("localDate", localDate);
-                sendBroadcast(intent);
-                finish();
-            }
-        });
-
-        deleteEventBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteEvent();
-                finish();
-            }
-        });
 
         eventNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -181,40 +183,16 @@ public class EventEditActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                boolean enabled = s != null && !s.toString().trim().equals("");
-                handleSaveBtnState(enabled);
+                saveEventMenuItemEnabled = s != null && !s.toString().trim().equals("");
+                invalidateOptionsMenu();
             }
         });
     }
 
-    private void handleSaveBtnState(boolean enabled) {
-        if (enabled) {
-            saveEventBtn.setEnabled(true);
-            saveEventBtn.setBackgroundColor(Color.rgb(3, 166, 240));
-        } else {
-            saveEventBtn.setEnabled(false);
-            saveEventBtn.setBackgroundColor(Color.LTGRAY);
-        }
-    }
-
-    private void deleteEvent() {
-        Event.events.removeIf(ev -> ev.getEventId() == editEvent.getEventId());
-    }
-
     public void saveEvent() {
-
         String eventName = eventNameEditText.getText().toString();
-
-        if (mode == Mode.NEW) {
-            Event event = new Event(System.nanoTime(), eventName, localDate, time);
-            Event.events.add(event);
-        } else if (mode == Mode.EDIT) {
-            editEvent.setDate(localDate);
-            editEvent.setTime(time);
-            editEvent.setName(eventName);
-            Event.events.removeIf(ev -> ev.getEventId() == editEvent.getEventId());
-            Event.events.add(editEvent);
-        }
+        Event event = new Event(System.nanoTime(), eventName, localDate, time);
+        Event.events.add(event);
     }
 
 //    public void saveNewEvent(View view) {

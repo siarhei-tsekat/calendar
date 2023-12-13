@@ -1,9 +1,11 @@
 package com.me.calendar.navigation;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,7 +17,10 @@ import com.me.calendar.CalendarUtils;
 import com.me.calendar.Event;
 import com.me.calendar.HourAdapter;
 import com.me.calendar.HourEvent;
+import com.me.calendar.NewEventActivity;
+import com.me.calendar.OnItemClickListener;
 import com.me.calendar.R;
+import com.me.calendar.screen.MainActivity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -23,7 +28,7 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class DayFragment extends Fragment {
+public class DayFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private static final String ARG_LOCAL_DATE = "DayFragment.localDate";
 
@@ -70,6 +75,14 @@ public class DayFragment extends Fragment {
         setDayView();
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && localDate != null) {
+            MainActivity.selectedDate = localDate;
+        }
+    }
+
     private void setDayView() {
         monthDayTex.setText(CalendarUtils.monthDayFromDate(localDate));
         String dayOfWeek = localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.getDefault());
@@ -78,9 +91,18 @@ public class DayFragment extends Fragment {
     }
 
     private void setHourAdapter() {
-        HourAdapter hourAdapter = new HourAdapter(getActivity(), hourEventList());
+        ArrayList<HourEvent> hourEvents = hourEventList();
+        HourAdapter hourAdapter = new HourAdapter(getActivity(), hourEvents);
         hourListView.setAdapter(hourAdapter);
+        hourListView.setOnItemClickListener(this);
         hourListView.setSelection(8);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        HourEvent itemAtPosition = (HourEvent) hourListView.getItemAtPosition(position);
+        Intent intent = NewEventActivity.newInstance(getContext(), localDate, itemAtPosition.getTime());
+        startActivity(intent);
     }
 
     private ArrayList<HourEvent> hourEventList() {

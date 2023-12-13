@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".EventEditActivity"
+        tools:context=".NewEventActivity"
         android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/edit_event_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <EditText
             android:textCursorDrawable="@null"
@@ -19,50 +29,34 @@
             android:background="@drawable/boarder"
             android:inputType="text"
             android:layout_marginTop="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" />
 
-    <TextView
-            android:id="@+id/eventDateTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:text="Date"
-            android:textSize="20sp"
-            android:textAlignment="center"
-            android:textColor="@color/black" />
-
-    <TextView
-            android:id="@+id/eventTimeTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:text="Time"
-            android:textSize="20sp"
-            android:textAlignment="center"
-            android:textColor="@color/black" />
-
-    <Button
-            android:id="@+id/saveEventBtn"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Save"
-            android:layout_gravity="center"
-            style="@style/CommonButton" />
+            android:layout_height="70dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
 
-    <Button
-            android:id="@+id/deleteEventBtn"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Delete"
-            android:layout_gravity="center"
-            style="@style/CommonButton" />
+        <TextView
+                android:id="@+id/eventDateTextView"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textAlignment="gravity"
+                android:text="Date"
+                android:textSize="20sp"
+                android:textColor="@color/black" />
+
+        <TextView
+                android:id="@+id/eventTimeTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:gravity="end"
+                android:text="Time"
+                android:textSize="20sp"
+                android:textColor="@color/black" />
+    </LinearLayout>
 </LinearLayout>

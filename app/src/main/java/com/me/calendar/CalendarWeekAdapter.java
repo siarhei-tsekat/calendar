@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
@@ -38,32 +40,44 @@ public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
-        LocalDate date = days.get(position);
+        LocalDate currentCalendarDate = days.get(position);
 
-        holder.dayOfMonthTextView.setText(String.valueOf(date.getDayOfMonth()));
+        holder.dayOfMonthTextView.setText(String.valueOf(currentCalendarDate.getDayOfMonth()));
 
-        if (date.getMonth().equals(currentDate.getMonth())) {
+        if (currentCalendarDate.getMonth().equals(currentDate.getMonth())) {
             holder.dayOfMonthTextView.setTextColor(Color.BLACK);
-            if (date.equals(currentDate) && LocalDate.now().equals(currentDate)) {
-//            holder.parentView.setBackgroundDrawable(new CircleDrawable(Color.rgb(179, 224, 255), Color.rgb(179, 224, 255), 25));
-                holder.dayOfMonthTextView.setTextColor(Color.rgb(219, 29, 158));
+            if (currentCalendarDate.equals(currentDate) && LocalDate.now().equals(currentDate)) {
+                holder.dayOfMonthTextView.setTextColor(Color.rgb(66, 215, 245));
             }
         } else {
             holder.dayOfMonthTextView.setTextColor(Color.LTGRAY);
         }
 
-        if (date.getDayOfMonth() == 4) {
+        List<Event> eventsForDay = getAmountEventsForDay(currentEvents, currentCalendarDate);
+
+        if (eventsForDay.size() > 0) {
             holder.event_shape_1.setVisibility(View.VISIBLE);
-            holder.event_shape_2.setVisibility(View.VISIBLE);
-            holder.event_shape_2.setBackgroundColor(Color.rgb(7, 176, 137));
+            holder.event_shape_1.setText(eventsForDay.get(0).getName());
         }
 
-        if (date.getDayOfMonth() == 5) {
-            holder.event_shape_1.setVisibility(View.VISIBLE);
+        if (eventsForDay.size() > 1) {
             holder.event_shape_2.setVisibility(View.VISIBLE);
             holder.event_shape_2.setBackgroundColor(Color.rgb(7, 176, 137));
+            holder.event_shape_2.setText(eventsForDay.get(1).getName());
         }
+
+        if (eventsForDay.size() > 2) {
+            holder.event_shape_3.setVisibility(View.VISIBLE);
+            holder.event_shape_3.setBackgroundColor(Color.rgb(133, 50, 168));
+            holder.event_shape_3.setText(eventsForDay.get(2).getName());
+        }
+
     }
+
+    private List<Event> getAmountEventsForDay(ArrayList<Event> currentEvents, LocalDate currentCalendarDate) {
+        return currentEvents.stream().filter(event -> event.getDate().isEqual(currentCalendarDate)).collect(Collectors.toList());
+    }
+
 
     @Override
     public int getItemCount() {

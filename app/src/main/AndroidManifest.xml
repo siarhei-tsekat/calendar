@@ -24,11 +24,11 @@
         </activity>
 
         <activity
-                android:name=".NewEventActivity"
+                android:name=".screen.NewEventActivity"
                 android:exported="false" />
 
         <activity
-                android:name=".EditEventActivity"
+                android:name=".screen.EditEventActivity"
                 android:exported="false" />
     </application>
 

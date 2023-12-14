@@ -1,4 +1,4 @@
-package com.me.calendar;
+package com.me.calendar.repository.model;
 
 import java.time.LocalTime;
 import java.util.ArrayList;

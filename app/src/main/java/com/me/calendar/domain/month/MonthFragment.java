@@ -1,4 +1,4 @@
-package com.me.calendar.navigation;
+package com.me.calendar.domain.month;
 
 import static com.me.calendar.CalendarUtils.daysInMonthArray;
 import static com.me.calendar.CalendarUtils.monthYearFromDate;
@@ -20,11 +20,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
-import com.me.calendar.CalendarMonthAdapter;
-import com.me.calendar.Event;
+import com.me.calendar.repository.model.Event;
 import com.me.calendar.OnItemClickListener;
 import com.me.calendar.R;
-import com.me.calendar.screen.DayPagerFragment;
+import com.me.calendar.domain.day.DayPagerFragment;
 import com.me.calendar.screen.MainActivity;
 
 import java.time.LocalDate;

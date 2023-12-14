@@ -1,4 +1,4 @@
-package com.me.calendar;
+package com.me.calendar.domain.month;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -8,19 +8,23 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.me.calendar.repository.model.Event;
+import com.me.calendar.OnItemClickListener;
+import com.me.calendar.R;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
+public class CalendarMonthAdapter extends RecyclerView.Adapter<CalendarMonthViewHolder> {
 
     private final ArrayList<LocalDate> days;
     private final OnItemClickListener onItemClickListener;
     private LocalDate currentDate;
     private ArrayList<Event> currentEvents;
 
-    public CalendarWeekAdapter(ArrayList<LocalDate> days, OnItemClickListener onItemClickListener, LocalDate currentDate, ArrayList<Event> currentEvents) {
+    public CalendarMonthAdapter(ArrayList<LocalDate> days, OnItemClickListener onItemClickListener, LocalDate currentDate, ArrayList<Event> currentEvents) {
         this.days = days;
         this.onItemClickListener = onItemClickListener;
         this.currentDate = currentDate;
@@ -29,17 +33,17 @@ public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarViewHolder
 
     @NonNull
     @Override
-    public CalendarViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CalendarMonthViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.calendar_cell, parent, false);
 
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-        layoutParams.height = parent.getHeight();
-        return new CalendarViewHolder(view, onItemClickListener, days);
+        layoutParams.height = (int) (parent.getHeight() * 0.166666666);
+        return new CalendarMonthViewHolder(view, onItemClickListener, days);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CalendarMonthViewHolder holder, int position) {
         LocalDate currentCalendarDate = days.get(position);
 
         holder.dayOfMonthTextView.setText(String.valueOf(currentCalendarDate.getDayOfMonth()));
@@ -78,9 +82,12 @@ public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarViewHolder
         return currentEvents.stream().filter(event -> event.getDate().isEqual(currentCalendarDate)).collect(Collectors.toList());
     }
 
-
     @Override
     public int getItemCount() {
         return days.size();
+    }
+
+    public void update(ArrayList<Event> events) {
+        currentEvents = events;
     }
 }

@@ -1,4 +1,4 @@
-package com.me.calendar.model;
+package com.me.calendar.repository.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

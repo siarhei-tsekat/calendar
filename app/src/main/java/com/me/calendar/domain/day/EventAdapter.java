@@ -1,4 +1,4 @@
-package com.me.calendar;
+package com.me.calendar.domain.day;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.me.calendar.CalendarUtils;
+import com.me.calendar.R;
+import com.me.calendar.repository.model.Event;
 
 import java.util.List;
 

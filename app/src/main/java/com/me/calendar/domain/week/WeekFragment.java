@@ -1,4 +1,4 @@
-package com.me.calendar.navigation;
+package com.me.calendar.domain.week;
 
 import static com.me.calendar.CalendarUtils.monthYearFromDate;
 
@@ -16,9 +16,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.me.calendar.CalendarUtils;
-import com.me.calendar.CalendarWeekAdapter;
-import com.me.calendar.Event;
-import com.me.calendar.EventAdapter;
+import com.me.calendar.domain.day.EventAdapter;
+import com.me.calendar.repository.model.Event;
 import com.me.calendar.OnItemClickListener;
 import com.me.calendar.R;
 
@@ -84,10 +83,10 @@ public class WeekFragment extends Fragment implements OnItemClickListener {
         monthYearTex.setText(monthYearFromDate(localDate));
         ArrayList<LocalDate> days = CalendarUtils.daysInWeekArray(localDate);
         ArrayList<Event> eventsForWeek = Event.eventsForWeek(localDate);
-        CalendarWeekAdapter calendarMonthAdapter = new CalendarWeekAdapter(days, this, localDate, eventsForWeek);
+        CalendarWeekAdapter calendarWeekAdapter = new CalendarWeekAdapter(days, this, localDate, eventsForWeek);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 7);
         calendarRecycleView.setLayoutManager(layoutManager);
-        calendarRecycleView.setAdapter(calendarMonthAdapter);
+        calendarRecycleView.setAdapter(calendarWeekAdapter);
         setEventAdapter();
     }
 

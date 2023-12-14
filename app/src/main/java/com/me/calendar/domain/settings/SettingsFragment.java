@@ -1,4 +1,4 @@
-package com.me.calendar.navigation;
+package com.me.calendar.domain.settings;
 
 import android.os.Bundle;
 

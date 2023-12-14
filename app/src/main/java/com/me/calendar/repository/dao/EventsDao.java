@@ -3,8 +3,8 @@ package com.me.calendar.repository.dao;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.me.calendar.model.Event;
 import com.me.calendar.repository.Store;
+import com.me.calendar.repository.model.Event;
 
 public class EventsDao {
 
@@ -22,11 +22,10 @@ public class EventsDao {
 
         ContentValues values = new ContentValues();
 
-        values.put("day", event.getDay());
-        values.put("month", event.getMonth());
-        values.put("year", event.getYear());
-        values.put("event_name", event.getEventName());
-        values.put("event_note", event.getEventNote().orElse(""));
+        values.put("day", event.getDate().getDayOfMonth());
+        values.put("month", event.getDate().getMonth().getValue());
+        values.put("year", event.getDate().getYear());
+        values.put("event_name", event.getName());
 
         db.insert("events", null, values);
     }

@@ -1,4 +1,4 @@
-package com.me.calendar.screen;
+package com.me.calendar.domain.day;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,18 +8,22 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.me.calendar.R;
-import com.me.calendar.navigation.MonthFragment;
 
 import java.time.LocalDate;
 
-public class MonthPagerFragment extends Fragment {
+public class DayPagerFragment extends Fragment {
     private ViewPager viewPager;
-    private LocalDate now = LocalDate.now();
-    private int currentItem = 12;
+    private LocalDate now;
+    private int currentItem = 50;
+
+    public DayPagerFragment(LocalDate date) {
+        this.now = date;
+    }
 
     @Nullable
     @Override
@@ -28,7 +32,7 @@ public class MonthPagerFragment extends Fragment {
 
         viewPager = view.findViewById(R.id.fragment_view_pager);
 
-//        FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
 
         viewPager.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
             @NonNull
@@ -37,19 +41,19 @@ public class MonthPagerFragment extends Fragment {
 
                 if (position > currentItem) {
                     int diff = Math.abs(position - currentItem);
-                    return MonthFragment.newInstance(now.plusMonths(diff));
+                    return DayFragment.newInstance(now.plusDays(diff));
 
                 } else if (position < currentItem) {
                     int diff = Math.abs(currentItem - position);
-                    return MonthFragment.newInstance(now.minusMonths(diff));
+                    return DayFragment.newInstance(now.minusDays(diff));
                 } else {
-                    return MonthFragment.newInstance(now);
+                    return DayFragment.newInstance(now);
                 }
             }
 
             @Override
             public int getCount() {
-                return 24;
+                return 100;
             }
 
         });

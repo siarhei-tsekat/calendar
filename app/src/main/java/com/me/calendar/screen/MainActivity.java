@@ -14,9 +14,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.me.calendar.NewEventActivity;
 import com.me.calendar.R;
-import com.me.calendar.navigation.SettingsFragment;
+import com.me.calendar.domain.day.DayPagerFragment;
+import com.me.calendar.domain.month.MonthPagerFragment;
+import com.me.calendar.domain.settings.SettingsFragment;
+import com.me.calendar.domain.week.WeekPagerFragment;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

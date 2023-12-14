@@ -1,4 +1,4 @@
-package com.me.calendar.navigation;
+package com.me.calendar.domain.day;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,11 +14,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.me.calendar.CalendarUtils;
-import com.me.calendar.Event;
-import com.me.calendar.HourAdapter;
-import com.me.calendar.HourEvent;
-import com.me.calendar.NewEventActivity;
-import com.me.calendar.OnItemClickListener;
+import com.me.calendar.repository.model.Event;
+import com.me.calendar.repository.model.HourEvent;
+import com.me.calendar.screen.NewEventActivity;
 import com.me.calendar.R;
 import com.me.calendar.screen.MainActivity;
 

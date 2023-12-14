@@ -1,4 +1,4 @@
-package com.me.calendar;
+package com.me.calendar.screen;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -21,6 +21,10 @@ import android.widget.TimePicker;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import com.me.calendar.CalendarUtils;
+import com.me.calendar.repository.model.Event;
+import com.me.calendar.R;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

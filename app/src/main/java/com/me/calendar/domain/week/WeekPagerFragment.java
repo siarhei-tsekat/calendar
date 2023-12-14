@@ -1,4 +1,4 @@
-package com.me.calendar.screen;
+package com.me.calendar.domain.week;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,6 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.me.calendar.R;
-import com.me.calendar.navigation.WeekFragment;
 
 import java.time.LocalDate;
 

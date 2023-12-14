@@ -1,4 +1,4 @@
-package com.me.calendar;
+package com.me.calendar.domain.day;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.time.LocalDate;
+import com.me.calendar.CalendarUtils;
+import com.me.calendar.repository.model.HourEvent;
+import com.me.calendar.R;
+import com.me.calendar.repository.model.Event;
+import com.me.calendar.screen.EditEventActivity;
+
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +36,9 @@ public class HourAdapter extends ArrayAdapter<HourEvent> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.hour_cell, parent, false);
         }
 
-        setHour(convertView, event.time);
+        setHour(convertView, event.getTime());
 
-        setEvents(convertView, event.events);
+        setEvents(convertView, event.getEvents());
 
         return convertView;
     }

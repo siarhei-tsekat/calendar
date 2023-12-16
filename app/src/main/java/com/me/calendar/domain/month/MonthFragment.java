@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,10 +19,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
-import com.me.calendar.repository.model.Event;
 import com.me.calendar.OnItemClickListener;
 import com.me.calendar.R;
 import com.me.calendar.domain.day.DayPagerFragment;
+import com.me.calendar.repository.model.Event;
 import com.me.calendar.screen.MainActivity;
 
 import java.time.LocalDate;
@@ -33,7 +32,6 @@ public class MonthFragment extends Fragment implements OnItemClickListener {
 
     private static final String ARG_LOCAL_DATE = "MonthFragment.localDate";
 
-    private TextView monthYearTex;
     private RecyclerView calendarRecycleView;
     private LocalDate localDate;
     private CalendarMonthAdapter calendarMonthAdapter;
@@ -53,6 +51,7 @@ public class MonthFragment extends Fragment implements OnItemClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         localDate = (LocalDate) getArguments().getSerializable(ARG_LOCAL_DATE);
+
 
         IntentFilter filter = new IntentFilter("NewEventActivity.newEventAdded");
 
@@ -79,7 +78,8 @@ public class MonthFragment extends Fragment implements OnItemClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        MainActivity.selectedDate = LocalDate.now();
+        MainActivity.selectedDay = LocalDate.now();
+
     }
 
     @Nullable
@@ -94,7 +94,6 @@ public class MonthFragment extends Fragment implements OnItemClickListener {
     }
 
     private void setMonthView() {
-        monthYearTex.setText(monthYearFromDate(localDate));
         ArrayList<LocalDate> daysInMonth = daysInMonthArray(localDate);
         ArrayList<Event> eventsForMonth = Event.eventsForMonth(localDate);
         calendarMonthAdapter = new CalendarMonthAdapter(daysInMonth, this, localDate, eventsForMonth);
@@ -106,13 +105,12 @@ public class MonthFragment extends Fragment implements OnItemClickListener {
 
     private void initWidgets(View view) {
         calendarRecycleView = view.findViewById(R.id.calendarRecyclerView);
-        monthYearTex = view.findViewById(R.id.monthYearTV);
     }
 
     @Override
     public void onItemClick(int position, LocalDate date) {
         if (date != null) {
-            MainActivity.selectedDate = date;
+            MainActivity.selectedDay = date;
             NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
             navigationView.setCheckedItem(R.id.nav_day);
             getActivity().getSupportFragmentManager()

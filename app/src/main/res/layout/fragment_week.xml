@@ -8,29 +8,11 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="20dp">
-
-            <TextView
-                    android:id="@+id/monthYearTV"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_height="wrap_content"
-                    android:text="Feb 2023"
-                    android:textSize="20sp"
-                    android:textAlignment="center"
-                    android:textColor="@color/black" />
-        </LinearLayout>
-
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginTop="5dp">
 
             <TextView
                     android:layout_width="0dp"
@@ -103,19 +85,103 @@
                     android:textColor="@color/black"
                     android:textAlignment="center"
                     android:textSize="16sp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:background="@drawable/bottom_border"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textAlignment="center"
+                    android:textSize="16sp" />
+
+            <TextView
+                    android:id="@+id/week_day_1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="10"
+                    android:textColor="@color/black"
+                    android:textAlignment="center"
+                    android:textSize="16sp" />
+
+            <TextView
+                    android:id="@+id/week_day_2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="11"
+                    android:textColor="@color/black"
+                    android:textAlignment="center"
+                    android:textSize="16sp" />
+
+            <TextView
+                    android:id="@+id/week_day_3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="12"
+                    android:textColor="@color/black"
+                    android:textAlignment="center"
+                    android:textSize="16sp" />
+
+            <TextView
+                    android:id="@+id/week_day_4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="13"
+                    android:textColor="@color/black"
+                    android:textAlignment="center"
+                    android:textSize="16sp" />
+
+            <TextView
+                    android:id="@+id/week_day_5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="14"
+                    android:textColor="@color/black"
+                    android:textAlignment="center"
+                    android:textSize="16sp" />
+
+            <TextView
+                    android:id="@+id/week_day_6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="15"
+                    android:textColor="@color/black"
+                    android:textAlignment="center"
+                    android:textSize="16sp" />
+
+            <TextView
+                    android:id="@+id/week_day_7"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="16"
+                    android:textColor="@color/black"
+                    android:textAlignment="center"
+                    android:textSize="16sp" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/calendarRecyclerView"
+                android:id="@+id/calendarWeekRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
-        <ListView
-                android:id="@+id/eventListView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="5" />
     </LinearLayout>
 
 </FrameLayout>

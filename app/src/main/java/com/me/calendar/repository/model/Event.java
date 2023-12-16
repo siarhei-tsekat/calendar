@@ -6,7 +6,9 @@ import android.os.Parcelable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Event implements Parcelable {
 
@@ -21,6 +23,41 @@ public class Event implements Parcelable {
             }
         }
         return dayEvents;
+    }
+
+    public static ArrayList<Event> eventsForWeekAndTime(LocalDate date, LocalTime time) {
+        ArrayList<Event> dayEvents = new ArrayList<>();
+
+        for (Event event : events) {
+
+            int eventHour = event.time.getHour();
+            int cellHour = time.getHour();
+            int year = date.getYear();
+            Month month = date.getMonth();
+            boolean belongToCurrentWeek = inCurrentWeek(date, event.getDate());
+
+            if (event.getDate().getYear() == year &&
+                    event.getDate().getMonth().equals(month) &&
+                    eventHour == cellHour &&
+                    belongToCurrentWeek)
+            {
+                dayEvents.add(event);
+            }
+        }
+        return dayEvents;
+    }
+
+    private static boolean inCurrentWeek(LocalDate date, LocalDate eventDate) {
+
+        int dayOfMonth_a = date.getDayOfMonth();
+        int dayOfMonth_b = eventDate.getDayOfMonth();
+
+        if (Math.abs(dayOfMonth_a - dayOfMonth_b) > 7) return false;
+
+        int weekOfYear_a = date.get(WeekFields.of(Locale.getDefault()).weekOfYear());
+        int weekOfYear_b = eventDate.get(WeekFields.of(Locale.getDefault()).weekOfYear());
+
+        return weekOfYear_a == weekOfYear_b;
     }
 
     public static ArrayList<Event> eventsForMonth(LocalDate date) {

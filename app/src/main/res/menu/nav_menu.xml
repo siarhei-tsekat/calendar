@@ -11,11 +11,11 @@
 
         <item android:id="@+id/nav_week"
                 android:icon="@drawable/nav_week"
-                android:title="Weekly view"/>
+                android:title="Week view"/>
 
         <item android:id="@+id/nav_day"
                 android:icon="@drawable/nav_day"
-                android:title="Daily view"/>
+                android:title="Day view"/>
 
         <item android:id="@+id/nav_settings"
                 android:icon="@drawable/nav_settings"

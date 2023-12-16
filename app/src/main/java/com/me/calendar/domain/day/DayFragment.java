@@ -30,7 +30,6 @@ public class DayFragment extends Fragment implements AdapterView.OnItemClickList
 
     private static final String ARG_LOCAL_DATE = "DayFragment.localDate";
 
-    private TextView monthDayTex;
     private TextView dayOfWeekTextView;
     private ListView hourListView;
     private LocalDate localDate;
@@ -50,19 +49,22 @@ public class DayFragment extends Fragment implements AdapterView.OnItemClickList
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         localDate = (LocalDate) getArguments().getSerializable(ARG_LOCAL_DATE);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_day, container, false);
+//        getActivity().setTitle(CalendarUtils.monthDayFromDate(localDate));
+//        Toolbar myToolbar = view.findViewById(R.id.edit_event_toolbar);
+//        setSupportActionBar(myToolbar);
+
         initWidgets(view);
         return view;
     }
 
-
     private void initWidgets(View view) {
-        monthDayTex = view.findViewById(R.id.monthDayText);
         dayOfWeekTextView = view.findViewById(R.id.dayOfWeeTextView);
         hourListView = view.findViewById(R.id.hourListView);
     }
@@ -77,12 +79,11 @@ public class DayFragment extends Fragment implements AdapterView.OnItemClickList
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && localDate != null) {
-            MainActivity.selectedDate = localDate;
+            MainActivity.selectedDay = localDate;
         }
     }
 
     private void setDayView() {
-        monthDayTex.setText(CalendarUtils.monthDayFromDate(localDate));
         String dayOfWeek = localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.getDefault());
         dayOfWeekTextView.setText(dayOfWeek);
         setHourAdapter();

@@ -35,7 +35,7 @@ public class CalendarMonthAdapter extends RecyclerView.Adapter<CalendarMonthView
     @Override
     public CalendarMonthViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.calendar_cell, parent, false);
+        View view = layoutInflater.inflate(R.layout.calendar_month_grid_cell, parent, false);
 
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         layoutParams.height = (int) (parent.getHeight() * 0.166666666);

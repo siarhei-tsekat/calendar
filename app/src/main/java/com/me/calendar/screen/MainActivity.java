@@ -25,10 +25,12 @@ import java.time.LocalTime;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static LocalDate selectedDate = LocalDate.now();
+    public static LocalDate selectedDay = LocalDate.now();
 
     private DrawerLayout drawerLayout;
     private FloatingActionButton fab;
+    private WeekPagerFragment weekPagerFragment;
+    private MonthPagerFragment monthPagerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setTitle("");
 
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -58,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = NewEventActivity.newInstance(MainActivity.this, selectedDate, LocalTime.now());
+                Intent intent = NewEventActivity.newInstance(MainActivity.this, selectedDay, LocalTime.now());
                 startActivity(intent);
             }
         });

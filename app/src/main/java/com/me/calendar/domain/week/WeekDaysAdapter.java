@@ -17,14 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarWeekViewHolder> {
+public class WeekDaysAdapter extends RecyclerView.Adapter<DaysWeekViewHolder> {
 
-    private final ArrayList<LocalDate> days;
+    private final List<LocalDate> days;
     private final OnItemClickListener onItemClickListener;
     private LocalDate currentDate;
     private ArrayList<Event> currentEvents;
 
-    public CalendarWeekAdapter(ArrayList<LocalDate> days, OnItemClickListener onItemClickListener, LocalDate currentDate, ArrayList<Event> currentEvents) {
+    public WeekDaysAdapter(ArrayList<LocalDate> days, OnItemClickListener onItemClickListener, LocalDate currentDate, ArrayList<Event> currentEvents) {
         this.days = days;
         this.onItemClickListener = onItemClickListener;
         this.currentDate = currentDate;
@@ -33,17 +33,17 @@ public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarWeekViewHo
 
     @NonNull
     @Override
-    public CalendarWeekViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DaysWeekViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.calendar_week_cell, parent, false);
+        View view = layoutInflater.inflate(R.layout.calendar_week_top_area_cell, parent, false);
 
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-        layoutParams.height = parent.getHeight();
-        return new CalendarWeekViewHolder(view, onItemClickListener, days);
+//        layoutParams.height = (int) (parent.getHeight() * 0.1);
+        return new DaysWeekViewHolder(view, onItemClickListener, days);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CalendarWeekViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull DaysWeekViewHolder holder, int position) {
         LocalDate currentCalendarDate = days.get(position);
 
         holder.dayOfMonthTextView.setText(String.valueOf(currentCalendarDate.getDayOfMonth()));

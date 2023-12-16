@@ -1,15 +1,17 @@
 package com.me.calendar.repository.model;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 public class HourWeeklyEvents {
     LocalTime time;
-    List<List<Event>> events;
+    Map<LocalDate, List<Event>> events;
 
-    public HourWeeklyEvents(LocalTime time, List<List<Event>> events) {
+    public HourWeeklyEvents(LocalTime time, Map<LocalDate, List<Event>> eventsDaily) {
         this.time = time;
-        this.events = events;
+        this.events = eventsDaily;
     }
 
     public LocalTime getTime() {
@@ -20,11 +22,11 @@ public class HourWeeklyEvents {
         this.time = time;
     }
 
-    public List<List<Event>> getEvents() {
+    public Map<LocalDate, List<Event>> getEvents() {
         return events;
     }
 
-    public void setEvents(List<List<Event>> events) {
+    public void setEvents(Map<LocalDate, List<Event>> events) {
         this.events = events;
     }
 }

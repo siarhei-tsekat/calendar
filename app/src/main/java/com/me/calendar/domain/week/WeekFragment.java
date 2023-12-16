@@ -2,6 +2,10 @@ package com.me.calendar.domain.week;
 
 import static com.me.calendar.CalendarUtils.monthYearFromDate;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,13 +30,15 @@ import com.me.calendar.screen.MainActivity;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WeekFragment extends Fragment implements OnItemClickListener {
 
     private static final String ARG_LOCAL_DATE = "WeekFragment.localDate";
 
-//    private TextView monthYearTex;
+    //    private TextView monthYearTex;
 //    private RecyclerView weekDaysRecycleView;
     private LocalDate localDate;
     private TextView text_day_1;
@@ -45,6 +51,7 @@ public class WeekFragment extends Fragment implements OnItemClickListener {
 
     private RecyclerView calendarForWeekRecycleView;
     private RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
+    private CalendarForWeekAdapter calendarForWeekAdapter;
 
     public static Fragment newInstance(LocalDate localDate) {
         Bundle args = new Bundle();
@@ -61,6 +68,27 @@ public class WeekFragment extends Fragment implements OnItemClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         localDate = (LocalDate) getArguments().getSerializable(ARG_LOCAL_DATE);
+
+        IntentFilter filter = new IntentFilter("NewEventActivity.newEventAdded");
+
+        BroadcastReceiver smsBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                LocalDate localDate = (LocalDate) intent.getSerializableExtra("localDate");
+                calendarForWeekAdapter.update(hourEventList());
+
+                if (isAdded()) {
+                    requireActivity().runOnUiThread(() -> {
+                        calendarForWeekAdapter.notifyDataSetChanged();
+                    });
+                }
+//                calendarMonthAdapter.notifyItemChanged(5);
+
+//                RecyclerView.ViewHolder viewHolder = calendarRecycleView.findViewHolderForAdapterPosition(5);
+            }
+        };
+
+        requireActivity().registerReceiver(smsBroadcastReceiver, filter);
     }
 
     @Nullable
@@ -114,7 +142,7 @@ public class WeekFragment extends Fragment implements OnItemClickListener {
 //        weekDaysRecycleView.setAdapter(weekDaysAdapter);
 
 
-        CalendarForWeekAdapter calendarForWeekAdapter = new CalendarForWeekAdapter(this, localDate, hourEventList());
+        calendarForWeekAdapter = new CalendarForWeekAdapter(this, localDate, hourEventList(), days);
         RecyclerView.LayoutManager layoutManagerForCalendar = new GridLayoutManager(getActivity().getApplicationContext(), 8);
         calendarForWeekRecycleView.setLayoutManager(layoutManagerForCalendar);
         calendarForWeekRecycleView.setAdapter(calendarForWeekAdapter);
@@ -146,16 +174,17 @@ public class WeekFragment extends Fragment implements OnItemClickListener {
         for (int hour = 0; hour < 24; hour++) {
 
             LocalTime time = LocalTime.of(hour, 0);
-            ArrayList<Event> events = Event.eventsForWeekAndTime(localDate, time);
-            List<List<Event>> eventsDaily = new ArrayList<>();
+            ArrayList<LocalDate> weekDays = CalendarUtils.daysInWeekArray(localDate);
 
-            for (int i = 1; i <= 7; i++) {
-                eventsDaily.add(new ArrayList<>());
+            ArrayList<Event> events = Event.eventsForWeekAndTime(localDate, time);
+            Map<LocalDate, List<Event>> eventsDaily = new HashMap<>();
+
+            for (LocalDate weekDay : weekDays) {
+                eventsDaily.put(weekDay, new ArrayList<>());
             }
 
             for (Event event : events) {
-                int day = event.getDate().getDayOfWeek().getValue();
-                eventsDaily.get(day).add(event);
+                eventsDaily.get(event.getDate()).add(event);
             }
 
             HourWeeklyEvents hourEvent = new HourWeeklyEvents(time, eventsDaily);

@@ -25,10 +25,14 @@ enum ColumnType {
 
 public class CalendarForWeekAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
-    private ArrayList<HourWeeklyEvents> eventList;
+    private LocalDate localDate;
+    private List<HourWeeklyEvents> eventList;
+    private ArrayList<LocalDate> days;
 
-    public CalendarForWeekAdapter(Fragment fragment, LocalDate localDate, ArrayList<HourWeeklyEvents> eventList) {
+    public CalendarForWeekAdapter(Fragment fragment, LocalDate localDate, ArrayList<HourWeeklyEvents> eventList, ArrayList<LocalDate> days) {
+        this.localDate = localDate;
         this.eventList = eventList;
+        this.days = days;
     }
 
     @NonNull
@@ -54,6 +58,7 @@ public class CalendarForWeekAdapter extends RecyclerView.Adapter<CalendarViewHol
 
     @Override
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
+
         if (position % 8 == 0) {
             LocalTime time = getTimeForPosition(position);
             ((CalendarWeekTimeViewHolder) holder).setTimeTextView(time);
@@ -61,8 +66,11 @@ public class CalendarForWeekAdapter extends RecyclerView.Adapter<CalendarViewHol
             LocalTime time = getTimeForPosition(position);
 
             List<HourWeeklyEvents> eventsForCurrentHour = eventList.stream().filter(ev -> ev.getTime().getHour() == time.getHour()).collect(Collectors.toList());
-            int day = position % 7;
-            List<Event> events = eventsForCurrentHour.stream().map(e -> e.getEvents().get(day)).flatMap(l -> l.stream()).collect(Collectors.toList());
+            int day = position % 8 - 1;
+
+            LocalDate currentCalendarDate = days.get(day);
+
+            List<Event> events = eventsForCurrentHour.stream().map(e -> e.getEvents().get(currentCalendarDate)).flatMap(l -> l.stream()).collect(Collectors.toList());
             ((CalendarWeekViewHolder) holder).setEventsForTheTimeAndDate(events);
         }
     }
@@ -84,5 +92,9 @@ public class CalendarForWeekAdapter extends RecyclerView.Adapter<CalendarViewHol
     @Override
     public int getItemCount() {
         return 8 * 24;
+    }
+
+    public void update(List<HourWeeklyEvents> events) {
+        this.eventList = events;
     }
 }

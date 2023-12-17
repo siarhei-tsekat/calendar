@@ -5,17 +5,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.material.navigation.NavigationView;
 import com.me.calendar.OnItemClickListener;
 import com.me.calendar.R;
-import com.me.calendar.domain.day.DayPagerFragment;
 import com.me.calendar.repository.model.Event;
-import com.me.calendar.screen.MainActivity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
-public class CalendarWeekViewHolder extends CalendarViewHolder {
+public class CalendarWeekViewHolder extends CalendarViewHolder implements View.OnClickListener {
 
     private List<Event> events;
     public final View parentView;
@@ -23,6 +21,7 @@ public class CalendarWeekViewHolder extends CalendarViewHolder {
     private TextView calendar_week_event_1;
     private TextView calendar_week_event_2;
     private TextView calendar_week_event_3;
+    private LocalDate localDate;
 
     public CalendarWeekViewHolder(@NonNull View itemView, OnItemClickListener onItemClickListener) {
         super(itemView);
@@ -36,9 +35,14 @@ public class CalendarWeekViewHolder extends CalendarViewHolder {
         calendar_week_event_2.setVisibility(View.INVISIBLE);
         calendar_week_event_3.setVisibility(View.INVISIBLE);
 
+        clear();
 
         this.onItemClickListener = onItemClickListener;
         itemView.setOnClickListener(this);
+    }
+
+    public void setLocalDate(LocalDate localDate) {
+        this.localDate = localDate;
     }
 
     public void setEventsForTheTimeAndDate(List<Event> events) {
@@ -58,7 +62,6 @@ public class CalendarWeekViewHolder extends CalendarViewHolder {
             calendar_week_event_3.setVisibility(View.VISIBLE);
             calendar_week_event_3.setText(events.get(2).getName());
         }
-
 //        calendar_week_event_1.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -88,6 +91,12 @@ public class CalendarWeekViewHolder extends CalendarViewHolder {
 
     @Override
     public void onClick(View v) {
-//        onItemClickListener.onItemClick(getAdapterPosition(), days.get(getAdapterPosition()));
+        onItemClickListener.onItemClick(getAdapterPosition(), localDate);
+    }
+
+    public void clear() {
+        calendar_week_event_1.setVisibility(View.INVISIBLE);
+        calendar_week_event_2.setVisibility(View.INVISIBLE);
+        calendar_week_event_3.setVisibility(View.INVISIBLE);
     }
 }

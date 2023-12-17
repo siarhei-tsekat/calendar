@@ -1,5 +1,6 @@
 package com.me.calendar.domain.week;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.me.calendar.OnItemClickListener;
 import com.me.calendar.R;
 import com.me.calendar.repository.model.Event;
 import com.me.calendar.repository.model.HourWeeklyEvents;
@@ -25,14 +27,15 @@ enum ColumnType {
 
 public class CalendarForWeekAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
-    private LocalDate localDate;
+    private OnItemClickListener onItemClickListener;
     private List<HourWeeklyEvents> eventList;
     private ArrayList<LocalDate> days;
 
-    public CalendarForWeekAdapter(Fragment fragment, LocalDate localDate, ArrayList<HourWeeklyEvents> eventList, ArrayList<LocalDate> days) {
-        this.localDate = localDate;
+    public CalendarForWeekAdapter(OnItemClickListener onItemClickListener, ArrayList<HourWeeklyEvents> eventList, ArrayList<LocalDate> days) {
+        this.onItemClickListener = onItemClickListener;
         this.eventList = eventList;
         this.days = days;
+        days.add(0, null);
     }
 
     @NonNull
@@ -45,14 +48,16 @@ public class CalendarForWeekAdapter extends RecyclerView.Adapter<CalendarViewHol
 
             ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
             layoutParams.height = (int) (parent.getHeight() * 0.1);
-            return new CalendarWeekTimeViewHolder(view, null, eventList.get(0).getEvents().get(0));
+            return new CalendarWeekTimeViewHolder(view, (i, d) -> {
+            }, new ArrayList<>());
         } else {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
             View view = layoutInflater.inflate(R.layout.calendar_week_grid_cell, parent, false);
 
             ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
             layoutParams.height = (int) (parent.getHeight() * 0.1);
-            return new CalendarWeekViewHolder(view, null);
+
+            return new CalendarWeekViewHolder(view, onItemClickListener);
         }
     }
 
@@ -66,12 +71,15 @@ public class CalendarForWeekAdapter extends RecyclerView.Adapter<CalendarViewHol
             LocalTime time = getTimeForPosition(position);
 
             List<HourWeeklyEvents> eventsForCurrentHour = eventList.stream().filter(ev -> ev.getTime().getHour() == time.getHour()).collect(Collectors.toList());
-            int day = position % 8 - 1;
+
+            int day = position % 8;
 
             LocalDate currentCalendarDate = days.get(day);
 
             List<Event> events = eventsForCurrentHour.stream().map(e -> e.getEvents().get(currentCalendarDate)).flatMap(l -> l.stream()).collect(Collectors.toList());
+            ((CalendarWeekViewHolder) holder).clear();
             ((CalendarWeekViewHolder) holder).setEventsForTheTimeAndDate(events);
+            ((CalendarWeekViewHolder) holder).setLocalDate(currentCalendarDate);
         }
     }
 

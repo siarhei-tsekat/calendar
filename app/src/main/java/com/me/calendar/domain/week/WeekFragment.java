@@ -1,12 +1,9 @@
 package com.me.calendar.domain.week;
 
-import static com.me.calendar.CalendarUtils.monthYearFromDate;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +16,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.navigation.NavigationView;
 import com.me.calendar.CalendarUtils;
 import com.me.calendar.OnItemClickListener;
 import com.me.calendar.R;
-import com.me.calendar.domain.day.EventAdapter;
+import com.me.calendar.domain.day.DayPagerFragment;
 import com.me.calendar.repository.model.Event;
 import com.me.calendar.repository.model.HourWeeklyEvents;
 import com.me.calendar.screen.MainActivity;
@@ -38,8 +36,7 @@ public class WeekFragment extends Fragment implements OnItemClickListener {
 
     private static final String ARG_LOCAL_DATE = "WeekFragment.localDate";
 
-    //    private TextView monthYearTex;
-//    private RecyclerView weekDaysRecycleView;
+
     private LocalDate localDate;
     private TextView text_day_1;
     private TextView text_day_2;
@@ -105,7 +102,16 @@ public class WeekFragment extends Fragment implements OnItemClickListener {
     @Override
     public void onItemClick(int position, LocalDate date) {
         localDate = date;
-        setWeekView();
+        if (date != null) {
+            MainActivity.selectedDay = date;
+            NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
+            navigationView.setCheckedItem(R.id.nav_day);
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new DayPagerFragment(date))
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     @Override
@@ -142,7 +148,7 @@ public class WeekFragment extends Fragment implements OnItemClickListener {
 //        weekDaysRecycleView.setAdapter(weekDaysAdapter);
 
 
-        calendarForWeekAdapter = new CalendarForWeekAdapter(this, localDate, hourEventList(), days);
+        calendarForWeekAdapter = new CalendarForWeekAdapter(this, hourEventList(), days);
         RecyclerView.LayoutManager layoutManagerForCalendar = new GridLayoutManager(getActivity().getApplicationContext(), 8);
         calendarForWeekRecycleView.setLayoutManager(layoutManagerForCalendar);
         calendarForWeekRecycleView.setAdapter(calendarForWeekAdapter);

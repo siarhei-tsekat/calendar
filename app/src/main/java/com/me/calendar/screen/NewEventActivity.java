@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -23,8 +24,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.me.calendar.CalendarUtils;
-import com.me.calendar.repository.model.Event;
 import com.me.calendar.R;
+import com.me.calendar.repository.model.Event;
+import com.me.calendar.repository.model.EventRepeat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -44,6 +46,8 @@ public class NewEventActivity extends AppCompatActivity {
     private TextView evenTimeTextView;
     private LocalTime time;
     private LocalDate localDate;
+    private TextView repeatEventTextView;
+    private EventRepeat eventRepeat;
 
     public static Intent newInstance(Context context, LocalDate localDate, LocalTime time) {
         Intent intent = new Intent(context, NewEventActivity.class);
@@ -69,7 +73,8 @@ public class NewEventActivity extends AppCompatActivity {
         time = ((LocalTime) getIntent().getSerializableExtra(EXTRA_LOCAL_TIME));
         evenDateTextView.setText(CalendarUtils.formattedDate(localDate));
         evenTimeTextView.setText(CalendarUtils.formattedTime(time));
-
+        eventRepeat = EventRepeat.No;
+        repeatEventTextView.setText(eventRepeat.getValueName());
         initDatePicker();
         initTimePicker();
     }
@@ -173,6 +178,14 @@ public class NewEventActivity extends AppCompatActivity {
         eventNameEditText = findViewById(R.id.eventNameEditText);
         evenDateTextView = findViewById(R.id.eventDateTextView);
         evenTimeTextView = findViewById(R.id.eventTimeTextView);
+        repeatEventTextView = findViewById(R.id.repeat_event_textView);
+
+        repeatEventTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showRadioButtonDialog();
+            }
+        });
 
         eventNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -195,8 +208,32 @@ public class NewEventActivity extends AppCompatActivity {
 
     public void saveEvent() {
         String eventName = eventNameEditText.getText().toString();
-        Event event = new Event(System.nanoTime(), eventName, localDate, time);
+        Event event = new Event(System.nanoTime(), eventName, localDate, time, eventRepeat);
         Event.events.add(event);
+    }
+
+    private void showRadioButtonDialog() {
+
+        String[] grpname = new String[5];
+
+        grpname[0] = EventRepeat.No.getValueName();
+        grpname[1] = EventRepeat.Every_day.getValueName();
+        grpname[2] = EventRepeat.Every_week.getValueName();
+        grpname[3] = EventRepeat.Every_month.getValueName();
+        grpname[4] = EventRepeat.Every_year.getValueName();
+
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+
+        alertBuilder.setSingleChoiceItems(grpname, -1, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                repeatEventTextView.setText(grpname[item]);
+                eventRepeat = EventRepeat.fromString(grpname[item]);
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
     }
 
 //    public void saveNewEvent(View view) {

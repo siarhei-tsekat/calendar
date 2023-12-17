@@ -39,8 +39,7 @@ public class Event implements Parcelable {
             if (event.getDate().getYear() == year &&
                     event.getDate().getMonth().equals(month) &&
                     eventHour == cellHour &&
-                    belongToCurrentWeek)
-            {
+                    belongToCurrentWeek) {
                 dayEvents.add(event);
             }
         }
@@ -108,12 +107,18 @@ public class Event implements Parcelable {
     private String name;
     private LocalDate date;
     private LocalTime time;
+    private EventRepeat eventRepeat;
 
-    public Event(long eventId, String name, LocalDate date, LocalTime time) {
+    public Event(long eventId, String name, LocalDate date, LocalTime time, EventRepeat eventRepeat) {
         this.eventId = eventId;
         this.name = name;
         this.date = date;
         this.time = time;
+        this.eventRepeat = eventRepeat;
+    }
+
+    public void setEventRepeat(EventRepeat eventRepeat) {
+        this.eventRepeat = eventRepeat;
     }
 
     public long getEventId() {
@@ -173,6 +178,7 @@ public class Event implements Parcelable {
         dest.writeString(name);
         dest.writeSerializable(date);
         dest.writeSerializable(time);
+        dest.writeInt(eventRepeat.getId());
     }
 
     private void readFromParcel(Parcel in) {
@@ -181,5 +187,10 @@ public class Event implements Parcelable {
         name = in.readString();
         date = (LocalDate) in.readSerializable();
         time = (LocalTime) in.readSerializable();
+        eventRepeat = EventRepeat.fromId(in.readInt());
+    }
+
+    public EventRepeat getEventRepeat() {
+        return eventRepeat;
     }
 }

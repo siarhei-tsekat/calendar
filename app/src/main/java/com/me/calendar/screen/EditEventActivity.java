@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -23,8 +24,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.me.calendar.CalendarUtils;
-import com.me.calendar.repository.model.Event;
 import com.me.calendar.R;
+import com.me.calendar.repository.model.Event;
+import com.me.calendar.repository.model.EventRepeat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -44,6 +46,8 @@ public class EditEventActivity extends AppCompatActivity {
     private TextView evenTimeTextView;
     private LocalTime time;
     private LocalDate localDate;
+    private TextView repeatEventTextView;
+    private EventRepeat eventRepeat;
 
     public static Intent newInstance(Context context, Event event) {
         Intent intent = new Intent(context, EditEventActivity.class);
@@ -65,6 +69,8 @@ public class EditEventActivity extends AppCompatActivity {
 
         editEvent = getIntent().getParcelableExtra(EXTRA_EVENT);
         localDate = editEvent.getDate();
+        eventRepeat = editEvent.getEventRepeat();
+        repeatEventTextView.setText(eventRepeat.getValueName());
         eventNameEditText.setText(editEvent.getName());
         evenDateTextView.setText(CalendarUtils.formattedDate(editEvent.getDate()));
         evenTimeTextView.setText(CalendarUtils.formattedTime(editEvent.getTime()));
@@ -72,6 +78,30 @@ public class EditEventActivity extends AppCompatActivity {
 
         initDatePicker();
         initTimePicker();
+    }
+
+    private void showRadioButtonDialog() {
+
+        String[] grpname = new String[5];
+
+        grpname[0] = EventRepeat.No.getValueName();
+        grpname[1] = EventRepeat.Every_day.getValueName();
+        grpname[2] = EventRepeat.Every_week.getValueName();
+        grpname[3] = EventRepeat.Every_month.getValueName();
+        grpname[4] = EventRepeat.Every_year.getValueName();
+
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+
+        alertBuilder.setSingleChoiceItems(grpname, -1, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                repeatEventTextView.setText(grpname[item]);
+                eventRepeat = EventRepeat.fromString(grpname[item]);
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
     }
 
     @Override
@@ -182,7 +212,14 @@ public class EditEventActivity extends AppCompatActivity {
         eventNameEditText = findViewById(R.id.eventNameEditText);
         evenDateTextView = findViewById(R.id.eventDateTextView);
         evenTimeTextView = findViewById(R.id.eventTimeTextView);
+        repeatEventTextView = findViewById(R.id.repeat_event_textView);
 
+        repeatEventTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showRadioButtonDialog();
+            }
+        });
         eventNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -212,6 +249,7 @@ public class EditEventActivity extends AppCompatActivity {
         editEvent.setDate(localDate);
         editEvent.setTime(time);
         editEvent.setName(eventName);
+        editEvent.setEventRepeat(eventRepeat);
         Event.events.removeIf(ev -> ev.getEventId() == editEvent.getEventId());
         Event.events.add(editEvent);
     }

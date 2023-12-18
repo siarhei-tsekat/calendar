@@ -108,6 +108,8 @@ public class Event implements Parcelable {
     private LocalDate date;
     private LocalTime time;
     private EventRepeat eventRepeat;
+    protected LocalDate localDateEventRepeatFrom;
+    protected LocalDate localDateEventRepeatTill;
 
     public Event(long eventId, String name, LocalDate date, LocalTime time, EventRepeat eventRepeat) {
         this.eventId = eventId;
@@ -179,6 +181,8 @@ public class Event implements Parcelable {
         dest.writeSerializable(date);
         dest.writeSerializable(time);
         dest.writeInt(eventRepeat.getId());
+        dest.writeSerializable(localDateEventRepeatFrom);
+        dest.writeSerializable(localDateEventRepeatTill);
     }
 
     private void readFromParcel(Parcel in) {
@@ -188,9 +192,27 @@ public class Event implements Parcelable {
         date = (LocalDate) in.readSerializable();
         time = (LocalTime) in.readSerializable();
         eventRepeat = EventRepeat.fromId(in.readInt());
+        localDateEventRepeatFrom = (LocalDate) in.readSerializable();
+        localDateEventRepeatTill = (LocalDate) in.readSerializable();
     }
 
     public EventRepeat getEventRepeat() {
         return eventRepeat;
+    }
+
+    public void setEventRepeatFrom(LocalDate date) {
+        localDateEventRepeatFrom = date;
+    }
+
+    public void setEventRepeatTill(LocalDate date) {
+        localDateEventRepeatTill = date;
+    }
+
+    public LocalDate getLocalDateEventRepeatFrom() {
+        return localDateEventRepeatFrom;
+    }
+
+    public LocalDate getLocalDateEventRepeatTill() {
+        return localDateEventRepeatTill;
     }
 }

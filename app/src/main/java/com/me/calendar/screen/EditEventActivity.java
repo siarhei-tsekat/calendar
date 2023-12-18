@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -20,23 +19,19 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.me.calendar.CalendarUtils;
 import com.me.calendar.R;
 import com.me.calendar.repository.model.Event;
-import com.me.calendar.repository.model.EventRepeat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Calendar;
 
-public class EditEventActivity extends AppCompatActivity {
+public class EditEventActivity extends EventAbstract {
 
     private Event editEvent;
-
-    private DatePickerDialog datePickerDialog;
     private MenuItem saveMenuBtn;
     private boolean saveEventMenuItemEnabled = false;
     public static final String EXTRA_EVENT = "EditEventActivity.event";
@@ -46,8 +41,6 @@ public class EditEventActivity extends AppCompatActivity {
     private TextView evenTimeTextView;
     private LocalTime time;
     private LocalDate localDate;
-    private TextView repeatEventTextView;
-    private EventRepeat eventRepeat;
 
     public static Intent newInstance(Context context, Event event) {
         Intent intent = new Intent(context, EditEventActivity.class);
@@ -76,32 +69,19 @@ public class EditEventActivity extends AppCompatActivity {
         evenTimeTextView.setText(CalendarUtils.formattedTime(editEvent.getTime()));
         time = editEvent.getTime();
 
+        localDateEventRepeatFrom = editEvent.getLocalDateEventRepeatFrom() != null ?
+                editEvent.getLocalDateEventRepeatFrom() :
+                LocalDate.now();
+        localDateEventRepeatTill = editEvent.getLocalDateEventRepeatTill() != null ?
+                editEvent.getLocalDateEventRepeatTill() :
+                LocalDate.now();
+
+        initRepeatWidgets();
+
         initDatePicker();
         initTimePicker();
-    }
-
-    private void showRadioButtonDialog() {
-
-        String[] grpname = new String[5];
-
-        grpname[0] = EventRepeat.No.getValueName();
-        grpname[1] = EventRepeat.Every_day.getValueName();
-        grpname[2] = EventRepeat.Every_week.getValueName();
-        grpname[3] = EventRepeat.Every_month.getValueName();
-        grpname[4] = EventRepeat.Every_year.getValueName();
-
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-
-        alertBuilder.setSingleChoiceItems(grpname, -1, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                repeatEventTextView.setText(grpname[item]);
-                eventRepeat = EventRepeat.fromString(grpname[item]);
-                dialog.dismiss();
-            }
-        });
-
-        AlertDialog alert = alertBuilder.create();
-        alert.show();
+        initDatePickerForRepeatFrom();
+        initDatePickerForRepeatTill();
     }
 
     @Override
@@ -174,7 +154,7 @@ public class EditEventActivity extends AppCompatActivity {
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        datePickerDialog = new DatePickerDialog(this, AlertDialog.THEME_HOLO_LIGHT, dateSetListener, year, month, day);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, AlertDialog.THEME_HOLO_LIGHT, dateSetListener, year, month, day);
 
         evenDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,6 +193,9 @@ public class EditEventActivity extends AppCompatActivity {
         evenDateTextView = findViewById(R.id.eventDateTextView);
         evenTimeTextView = findViewById(R.id.eventTimeTextView);
         repeatEventTextView = findViewById(R.id.repeat_event_textView);
+        eventPeriodRepeat = findViewById(R.id.event_repeat_period_layout);
+        repeatEventFromTextView = findViewById(R.id.repeat_event_from);
+        repeatEventTillTextView = findViewById(R.id.repeat_event_till);
 
         repeatEventTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,6 +233,8 @@ public class EditEventActivity extends AppCompatActivity {
         editEvent.setTime(time);
         editEvent.setName(eventName);
         editEvent.setEventRepeat(eventRepeat);
+        editEvent.setEventRepeatFrom(localDateEventRepeatFrom);
+        editEvent.setEventRepeatTill(localDateEventRepeatTill);
         Event.events.removeIf(ev -> ev.getEventId() == editEvent.getEventId());
         Event.events.add(editEvent);
     }

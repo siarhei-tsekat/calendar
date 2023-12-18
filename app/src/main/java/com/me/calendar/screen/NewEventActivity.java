@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -20,7 +19,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.me.calendar.CalendarUtils;
@@ -32,9 +30,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Calendar;
 
-public class NewEventActivity extends AppCompatActivity {
+public class NewEventActivity extends EventAbstract {
 
-    private DatePickerDialog datePickerDialog;
     private MenuItem saveEventMenuItem;
     private boolean saveEventMenuItemEnabled = false;
 
@@ -46,8 +43,6 @@ public class NewEventActivity extends AppCompatActivity {
     private TextView evenTimeTextView;
     private LocalTime time;
     private LocalDate localDate;
-    private TextView repeatEventTextView;
-    private EventRepeat eventRepeat;
 
     public static Intent newInstance(Context context, LocalDate localDate, LocalTime time) {
         Intent intent = new Intent(context, NewEventActivity.class);
@@ -75,8 +70,16 @@ public class NewEventActivity extends AppCompatActivity {
         evenTimeTextView.setText(CalendarUtils.formattedTime(time));
         eventRepeat = EventRepeat.No;
         repeatEventTextView.setText(eventRepeat.getValueName());
+
+        localDateEventRepeatFrom = LocalDate.now();
+        localDateEventRepeatTill = LocalDate.now();
+        initRepeatWidgets();
+
         initDatePicker();
         initTimePicker();
+
+        initDatePickerForRepeatFrom();
+        initDatePickerForRepeatTill();
     }
 
     @Override
@@ -144,7 +147,7 @@ public class NewEventActivity extends AppCompatActivity {
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
-        datePickerDialog = new DatePickerDialog(this, AlertDialog.THEME_HOLO_LIGHT, dateSetListener, year, month, day);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, AlertDialog.THEME_HOLO_LIGHT, dateSetListener, year, month, day);
 
         evenDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,6 +183,10 @@ public class NewEventActivity extends AppCompatActivity {
         evenTimeTextView = findViewById(R.id.eventTimeTextView);
         repeatEventTextView = findViewById(R.id.repeat_event_textView);
 
+        eventPeriodRepeat = findViewById(R.id.event_repeat_period_layout);
+        repeatEventFromTextView = findViewById(R.id.repeat_event_from);
+        repeatEventTillTextView = findViewById(R.id.repeat_event_till);
+
         repeatEventTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,31 +216,11 @@ public class NewEventActivity extends AppCompatActivity {
     public void saveEvent() {
         String eventName = eventNameEditText.getText().toString();
         Event event = new Event(System.nanoTime(), eventName, localDate, time, eventRepeat);
+        if (eventRepeat != EventRepeat.No) {
+            event.setEventRepeatFrom(localDateEventRepeatFrom);
+            event.setEventRepeatTill(localDateEventRepeatTill);
+        }
         Event.events.add(event);
-    }
-
-    private void showRadioButtonDialog() {
-
-        String[] grpname = new String[5];
-
-        grpname[0] = EventRepeat.No.getValueName();
-        grpname[1] = EventRepeat.Every_day.getValueName();
-        grpname[2] = EventRepeat.Every_week.getValueName();
-        grpname[3] = EventRepeat.Every_month.getValueName();
-        grpname[4] = EventRepeat.Every_year.getValueName();
-
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-
-        alertBuilder.setSingleChoiceItems(grpname, -1, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                repeatEventTextView.setText(grpname[item]);
-                eventRepeat = EventRepeat.fromString(grpname[item]);
-                dialog.dismiss();
-            }
-        });
-
-        AlertDialog alert = alertBuilder.create();
-        alert.show();
     }
 
 //    public void saveNewEvent(View view) {

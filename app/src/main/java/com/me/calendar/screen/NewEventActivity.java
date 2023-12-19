@@ -20,11 +20,13 @@ import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.me.calendar.CalendarUtils;
 import com.me.calendar.R;
 import com.me.calendar.repository.model.Event;
 import com.me.calendar.repository.model.EventRepeat;
+import com.me.calendar.repository.model.PaletteColors;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -80,6 +82,8 @@ public class NewEventActivity extends EventAbstract {
 
         initDatePickerForRepeatFrom();
         initDatePickerForRepeatTill();
+
+        initColorPicker(PaletteColors.Blue);
     }
 
     @Override
@@ -182,6 +186,10 @@ public class NewEventActivity extends EventAbstract {
         evenDateTextView = findViewById(R.id.eventDateTextView);
         evenTimeTextView = findViewById(R.id.eventTimeTextView);
         repeatEventTextView = findViewById(R.id.repeat_event_textView);
+        colorPickerTextView = findViewById(R.id.event_color_textView);
+        colorPickerImageView = findViewById(R.id.event_color_image_view);
+
+        DrawableCompat.setTint(DrawableCompat.wrap(colorPickerImageView.getDrawable()), chosenColor);
 
         eventPeriodRepeat = findViewById(R.id.event_repeat_period_layout);
         repeatEventFromTextView = findViewById(R.id.repeat_event_from);
@@ -215,7 +223,7 @@ public class NewEventActivity extends EventAbstract {
 
     public void saveEvent() {
         String eventName = eventNameEditText.getText().toString();
-        Event event = new Event(System.nanoTime(), eventName, localDate, time, eventRepeat);
+        Event event = new Event(System.nanoTime(), eventName, localDate, time, eventRepeat, chosenColor);
         if (eventRepeat != EventRepeat.No) {
             event.setEventRepeatFrom(localDateEventRepeatFrom);
             event.setEventRepeatTill(localDateEventRepeatTill);

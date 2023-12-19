@@ -17,4 +17,16 @@
     <color name="lavender">#8692f7</color>
     <color name="textColorDisabled">#C9C1C1</color>
     <color name="lightBlue">#03A6F0</color>
+
+    <color name="eventCircleColorBlue">#3084F2</color>
+    <color name="eventCircleColorLightBlue">#44D2F2</color>
+    <color name="eventCircleColorGreen">#38c172</color>
+    <color name="eventCircleColorOrange">#ffa500</color>
+    <color name="eventCircleColorYellow">#ffed4a</color>
+    <color name="eventCircleColorRed">#F23838</color>
+    <color name="eventCircleColorIndigo">#6574cd</color>
+    <color name="eventCircleColorViolet">#9561e2</color>
+    <color name="eventCircleColorPink">#f66d9b</color>
+
+
 </resources>

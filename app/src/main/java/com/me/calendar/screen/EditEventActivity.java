@@ -20,6 +20,7 @@ import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.me.calendar.CalendarUtils;
 import com.me.calendar.R;
@@ -82,6 +83,10 @@ public class EditEventActivity extends EventAbstract {
         initTimePicker();
         initDatePickerForRepeatFrom();
         initDatePickerForRepeatTill();
+
+        DrawableCompat.setTint(DrawableCompat.wrap(colorPickerImageView.getDrawable()), editEvent.getColor());
+
+        initColorPicker(editEvent.getColor());
     }
 
     @Override
@@ -196,6 +201,8 @@ public class EditEventActivity extends EventAbstract {
         eventPeriodRepeat = findViewById(R.id.event_repeat_period_layout);
         repeatEventFromTextView = findViewById(R.id.repeat_event_from);
         repeatEventTillTextView = findViewById(R.id.repeat_event_till);
+        colorPickerTextView = findViewById(R.id.event_color_textView);
+        colorPickerImageView = findViewById(R.id.event_color_image_view);
 
         repeatEventTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,6 +242,7 @@ public class EditEventActivity extends EventAbstract {
         editEvent.setEventRepeat(eventRepeat);
         editEvent.setEventRepeatFrom(localDateEventRepeatFrom);
         editEvent.setEventRepeatTill(localDateEventRepeatTill);
+        editEvent.setEventColor(chosenColor);
         Event.events.removeIf(ev -> ev.getEventId() == editEvent.getEventId());
         Event.events.add(editEvent);
     }

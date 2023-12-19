@@ -51,16 +51,19 @@ public class CalendarWeekViewHolder extends CalendarViewHolder implements View.O
         if (events.size() >= 1) {
             calendar_week_event_1.setVisibility(View.VISIBLE);
             calendar_week_event_1.setText(events.get(0).getName());
+            calendar_week_event_1.setBackgroundColor(events.get(0).getColor());
         }
 
         if (events.size() >= 2) {
             calendar_week_event_2.setVisibility(View.VISIBLE);
             calendar_week_event_2.setText(events.get(1).getName());
+            calendar_week_event_2.setBackgroundColor(events.get(0).getColor());
         }
 
         if (events.size() >= 3) {
             calendar_week_event_3.setVisibility(View.VISIBLE);
             calendar_week_event_3.setText(events.get(2).getName());
+            calendar_week_event_3.setBackgroundColor(events.get(0).getColor());
         }
 //        calendar_week_event_1.setOnClickListener(new View.OnClickListener() {
 //            @Override

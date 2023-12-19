@@ -1,0 +1,214 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp">
+
+        <ImageView
+                android:id="@+id/event_color_image_view_blue"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="20dp"
+                android:backgroundTint="@color/eventCircleColorBlue"
+                android:background="@drawable/circle"/>
+
+        <TextView
+                android:id="@+id/event_color_textView_blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:text="Blue" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp">
+
+        <ImageView
+                android:id="@+id/event_color_image_view_light_blue"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="20dp"
+                android:backgroundTint="@color/eventCircleColorLightBlue"
+                android:background="@drawable/circle"/>
+
+        <TextView
+                android:id="@+id/event_color_textView_light_blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:text="Light Blue" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp">
+
+        <ImageView
+                android:id="@+id/event_color_image_view_green"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="20dp"
+                android:backgroundTint="@color/eventCircleColorGreen"
+                android:background="@drawable/circle"/>
+
+        <TextView
+                android:id="@+id/event_color_textView_green"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:text="Green" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp">
+
+        <ImageView
+                android:id="@+id/event_color_image_view_orange"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="20dp"
+                android:backgroundTint="@color/eventCircleColorOrange"
+                android:background="@drawable/circle"/>
+
+        <TextView
+                android:id="@+id/event_color_textView_orange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:text="Orange" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp">
+
+        <ImageView
+                android:id="@+id/event_color_image_view_yellow"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="20dp"
+                android:backgroundTint="@color/eventCircleColorYellow"
+                android:background="@drawable/circle"/>
+
+        <TextView
+                android:id="@+id/event_color_textView_yellow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:text="Yellow" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp">
+
+        <ImageView
+                android:id="@+id/event_color_image_view_red"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="20dp"
+                android:backgroundTint="@color/eventCircleColorRed"
+                android:background="@drawable/circle"/>
+
+        <TextView
+                android:id="@+id/event_color_textView_red"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:text="Red" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp">
+
+        <ImageView
+                android:id="@+id/event_color_image_view_indigo"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="20dp"
+                android:backgroundTint="@color/eventCircleColorIndigo"
+                android:background="@drawable/circle"/>
+
+        <TextView
+                android:id="@+id/event_color_textView_indigo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:text="Indigo" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp">
+
+        <ImageView
+                android:id="@+id/event_color_image_view_violet"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="20dp"
+                android:backgroundTint="@color/eventCircleColorViolet"
+                android:background="@drawable/circle"/>
+
+        <TextView
+                android:id="@+id/event_color_textView_violet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:text="Violet" />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp">
+
+        <ImageView
+                android:id="@+id/event_color_image_view_pink"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="20dp"
+                android:backgroundTint="@color/eventCircleColorPink"
+                android:background="@drawable/circle"/>
+
+        <TextView
+                android:id="@+id/event_color_textView_pink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:text="Pink" />
+    </LinearLayout>
+
+</LinearLayout>

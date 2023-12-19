@@ -99,6 +99,7 @@ public class HourAdapter extends ArrayAdapter<HourEvent> {
     private void setEvent(TextView textView, Event event) {
         textView.setText(event.getName());
         textView.setVisibility(View.VISIBLE);
+        textView.setBackgroundColor(event.getColor());
     }
 
     private void hideEvent(TextView textView) {

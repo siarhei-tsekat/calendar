@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.me.calendar.repository.model.Event;
 import com.me.calendar.OnItemClickListener;
 import com.me.calendar.R;
+import com.me.calendar.repository.model.Event;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -62,18 +62,19 @@ public class CalendarMonthAdapter extends RecyclerView.Adapter<CalendarMonthView
         if (eventsForDay.size() > 0) {
             holder.event_shape_1.setVisibility(View.VISIBLE);
             holder.event_shape_1.setText(eventsForDay.get(0).getName());
+            holder.event_shape_1.setBackgroundColor(eventsForDay.get(0).getColor());
         }
 
         if (eventsForDay.size() > 1) {
             holder.event_shape_2.setVisibility(View.VISIBLE);
-            holder.event_shape_2.setBackgroundColor(Color.rgb(7, 176, 137));
             holder.event_shape_2.setText(eventsForDay.get(1).getName());
+            holder.event_shape_1.setBackgroundColor(eventsForDay.get(0).getColor());
         }
 
         if (eventsForDay.size() > 2) {
             holder.event_shape_3.setVisibility(View.VISIBLE);
-            holder.event_shape_3.setBackgroundColor(Color.rgb(133, 50, 168));
             holder.event_shape_3.setText(eventsForDay.get(2).getName());
+            holder.event_shape_1.setBackgroundColor(eventsForDay.get(0).getColor());
         }
 
     }

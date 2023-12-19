@@ -110,13 +110,15 @@ public class Event implements Parcelable {
     private EventRepeat eventRepeat;
     protected LocalDate localDateEventRepeatFrom;
     protected LocalDate localDateEventRepeatTill;
+    protected int eventColor;
 
-    public Event(long eventId, String name, LocalDate date, LocalTime time, EventRepeat eventRepeat) {
+    public Event(long eventId, String name, LocalDate date, LocalTime time, EventRepeat eventRepeat, int eventColor) {
         this.eventId = eventId;
         this.name = name;
         this.date = date;
         this.time = time;
         this.eventRepeat = eventRepeat;
+        this.eventColor = eventColor;
     }
 
     public void setEventRepeat(EventRepeat eventRepeat) {
@@ -145,6 +147,14 @@ public class Event implements Parcelable {
 
     public LocalTime getTime() {
         return time;
+    }
+
+    public void setEventColor(int eventColor) {
+        this.eventColor = eventColor;
+    }
+
+    public int getEventColor() {
+        return eventColor;
     }
 
     public void setTime(LocalTime time) {
@@ -181,6 +191,7 @@ public class Event implements Parcelable {
         dest.writeSerializable(date);
         dest.writeSerializable(time);
         dest.writeInt(eventRepeat.getId());
+        dest.writeInt(eventColor);
         dest.writeSerializable(localDateEventRepeatFrom);
         dest.writeSerializable(localDateEventRepeatTill);
     }
@@ -192,6 +203,7 @@ public class Event implements Parcelable {
         date = (LocalDate) in.readSerializable();
         time = (LocalTime) in.readSerializable();
         eventRepeat = EventRepeat.fromId(in.readInt());
+        eventColor = in.readInt();
         localDateEventRepeatFrom = (LocalDate) in.readSerializable();
         localDateEventRepeatTill = (LocalDate) in.readSerializable();
     }
@@ -214,5 +226,9 @@ public class Event implements Parcelable {
 
     public LocalDate getLocalDateEventRepeatTill() {
         return localDateEventRepeatTill;
+    }
+
+    public int getColor() {
+        return eventColor;
     }
 }

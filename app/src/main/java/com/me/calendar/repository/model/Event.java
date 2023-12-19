@@ -108,6 +108,7 @@ public class Event implements Parcelable {
     private LocalDate date;
     private LocalTime time;
     private EventRepeat eventRepeat;
+    private EventNotification eventNotification;
     protected LocalDate localDateEventRepeatFrom;
     protected LocalDate localDateEventRepeatTill;
     protected int eventColor;
@@ -191,6 +192,7 @@ public class Event implements Parcelable {
         dest.writeSerializable(date);
         dest.writeSerializable(time);
         dest.writeInt(eventRepeat.getId());
+        dest.writeInt(eventNotification.getId());
         dest.writeInt(eventColor);
         dest.writeSerializable(localDateEventRepeatFrom);
         dest.writeSerializable(localDateEventRepeatTill);
@@ -203,6 +205,7 @@ public class Event implements Parcelable {
         date = (LocalDate) in.readSerializable();
         time = (LocalTime) in.readSerializable();
         eventRepeat = EventRepeat.fromId(in.readInt());
+        eventNotification = EventNotification.fromId(in.readInt());
         eventColor = in.readInt();
         localDateEventRepeatFrom = (LocalDate) in.readSerializable();
         localDateEventRepeatTill = (LocalDate) in.readSerializable();
@@ -230,5 +233,13 @@ public class Event implements Parcelable {
 
     public int getColor() {
         return eventColor;
+    }
+
+    public void setEventNotification(EventNotification eventNotification) {
+        this.eventNotification = eventNotification;
+    }
+
+    public EventNotification getEventNotification() {
+        return eventNotification;
     }
 }

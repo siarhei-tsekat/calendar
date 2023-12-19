@@ -77,6 +77,8 @@ public class EditEventActivity extends EventAbstract {
                 editEvent.getLocalDateEventRepeatTill() :
                 LocalDate.now();
 
+        eventNotification = editEvent.getEventNotification();
+
         initRepeatWidgets();
 
         initDatePicker();
@@ -87,6 +89,8 @@ public class EditEventActivity extends EventAbstract {
         DrawableCompat.setTint(DrawableCompat.wrap(colorPickerImageView.getDrawable()), editEvent.getColor());
 
         initColorPicker(editEvent.getColor());
+
+        initAlarm();
     }
 
     @Override
@@ -203,6 +207,7 @@ public class EditEventActivity extends EventAbstract {
         repeatEventTillTextView = findViewById(R.id.repeat_event_till);
         colorPickerTextView = findViewById(R.id.event_color_textView);
         colorPickerImageView = findViewById(R.id.event_color_image_view);
+        alarmTextView = findViewById(R.id.event_alarm_text_view);
 
         repeatEventTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,6 +248,7 @@ public class EditEventActivity extends EventAbstract {
         editEvent.setEventRepeatFrom(localDateEventRepeatFrom);
         editEvent.setEventRepeatTill(localDateEventRepeatTill);
         editEvent.setEventColor(chosenColor);
+        editEvent.setEventNotification(eventNotification);
         Event.events.removeIf(ev -> ev.getEventId() == editEvent.getEventId());
         Event.events.add(editEvent);
     }

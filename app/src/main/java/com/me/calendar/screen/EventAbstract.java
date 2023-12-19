@@ -16,6 +16,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.me.calendar.CalendarUtils;
 import com.me.calendar.R;
+import com.me.calendar.repository.model.EventNotification;
 import com.me.calendar.repository.model.EventRepeat;
 import com.me.calendar.repository.model.PaletteColors;
 
@@ -44,8 +45,41 @@ public class EventAbstract extends AppCompatActivity {
     protected TextView textViewViolet;
     protected TextView textViewPink;
     protected AlertDialog alertDialog;
+    protected TextView alarmTextView;
 
     protected int chosenColor = PaletteColors.Blue;
+    protected EventNotification eventNotification = EventNotification.alarm_no;
+
+    protected void initAlarm() {
+        String[] menuItems = new String[4];
+        menuItems[0] = EventNotification.alarm_10_min_before.value();
+        menuItems[1] = EventNotification.alarm_30_min_before.value();
+        menuItems[2] = EventNotification.alarm_1_hour_before.value();
+        menuItems[3] = EventNotification.alarm_1_day_before.value();
+
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+
+        alertBuilder.setSingleChoiceItems(menuItems, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                eventNotification = EventNotification.fromString(menuItems[which]);
+                alarmTextView.setText(menuItems[which]);
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alertDialog = alertBuilder.create();
+
+        if (eventNotification != EventNotification.alarm_no) {
+            alarmTextView.setText(eventNotification.value());
+        }
+        alarmTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.show();
+            }
+        });
+    }
 
     protected void initColorPicker(int colorRgb) {
 

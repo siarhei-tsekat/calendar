@@ -75,6 +75,7 @@ public class NewEventActivity extends EventAbstract {
 
         localDateEventRepeatFrom = LocalDate.now();
         localDateEventRepeatTill = LocalDate.now();
+
         initRepeatWidgets();
 
         initDatePicker();
@@ -84,6 +85,8 @@ public class NewEventActivity extends EventAbstract {
         initDatePickerForRepeatTill();
 
         initColorPicker(PaletteColors.Blue);
+
+        initAlarm();
     }
 
     @Override
@@ -188,6 +191,7 @@ public class NewEventActivity extends EventAbstract {
         repeatEventTextView = findViewById(R.id.repeat_event_textView);
         colorPickerTextView = findViewById(R.id.event_color_textView);
         colorPickerImageView = findViewById(R.id.event_color_image_view);
+        alarmTextView = findViewById(R.id.event_alarm_text_view);
 
         DrawableCompat.setTint(DrawableCompat.wrap(colorPickerImageView.getDrawable()), chosenColor);
 
@@ -228,6 +232,9 @@ public class NewEventActivity extends EventAbstract {
             event.setEventRepeatFrom(localDateEventRepeatFrom);
             event.setEventRepeatTill(localDateEventRepeatTill);
         }
+
+        event.setEventNotification(eventNotification);
+
         Event.events.add(event);
     }
 

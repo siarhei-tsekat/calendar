@@ -16,4 +16,6 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="open_nav">Open Settings</string>
     <string name="close_nav">Close Settings</string>
+    <string name="new_event_title">Upcoming event</string>
+    <string name="new_event_text">New event</string>
 </resources>

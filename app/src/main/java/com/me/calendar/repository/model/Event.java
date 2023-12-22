@@ -120,6 +120,7 @@ public class Event implements Parcelable {
         this.time = time;
         this.eventRepeat = eventRepeat;
         this.eventColor = eventColor;
+        this.eventNotification = EventNotification.alarm_no;
     }
 
     public void setEventRepeat(EventRepeat eventRepeat) {

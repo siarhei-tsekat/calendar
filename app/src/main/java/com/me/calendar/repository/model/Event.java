@@ -3,6 +3,9 @@ package com.me.calendar.repository.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.me.calendar.repository.model.EventNotification;
+import com.me.calendar.repository.model.EventRepeat;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
@@ -103,14 +106,58 @@ public class Event implements Parcelable {
         return dayEvents;
     }
 
+    public static final Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
+
+        @Override
+        public Event createFromParcel(Parcel source) {
+            return new Event(source);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[0];
+        }
+    };
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeLong(eventId);
+        dest.writeString(name);
+        dest.writeSerializable(date);
+        dest.writeSerializable(time);
+        dest.writeInt(eventRepeat.getId());
+        dest.writeInt(eventNotification.getId());
+        dest.writeInt(eventColor);
+        dest.writeSerializable(localDateEventRepeatFrom);
+        dest.writeSerializable(localDateEventRepeatTill);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public Event(Parcel in) {
+        eventId = in.readLong();
+        name = in.readString();
+        date = (LocalDate) in.readSerializable();
+        time = (LocalTime) in.readSerializable();
+        eventRepeat = EventRepeat.fromId(in.readInt());
+        eventNotification = EventNotification.fromId(in.readInt());
+        eventColor = in.readInt();
+        localDateEventRepeatFrom = (LocalDate) in.readSerializable();
+        localDateEventRepeatTill = (LocalDate) in.readSerializable();
+    }
+
     private long eventId;
     private String name;
     private LocalDate date;
     private LocalTime time;
     private EventRepeat eventRepeat;
     private EventNotification eventNotification;
-    protected LocalDate localDateEventRepeatFrom;
-    protected LocalDate localDateEventRepeatTill;
+    protected LocalDate localDateEventRepeatFrom = LocalDate.now();
+    protected LocalDate localDateEventRepeatTill = LocalDate.now();
     protected int eventColor;
 
     public Event(long eventId, String name, LocalDate date, LocalTime time, EventRepeat eventRepeat, int eventColor) {
@@ -161,55 +208,6 @@ public class Event implements Parcelable {
 
     public void setTime(LocalTime time) {
         this.time = time;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public Event(Parcel in) {
-        readFromParcel(in);
-    }
-
-    public static final Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
-
-        @Override
-        public Event createFromParcel(Parcel source) {
-            return new Event(source);
-        }
-
-        @Override
-        public Event[] newArray(int size) {
-            return new Event[0];
-        }
-    };
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-
-        dest.writeLong(eventId);
-        dest.writeString(name);
-        dest.writeSerializable(date);
-        dest.writeSerializable(time);
-        dest.writeInt(eventRepeat.getId());
-        dest.writeInt(eventNotification.getId());
-        dest.writeInt(eventColor);
-        dest.writeSerializable(localDateEventRepeatFrom);
-        dest.writeSerializable(localDateEventRepeatTill);
-    }
-
-    private void readFromParcel(Parcel in) {
-
-        eventId = in.readLong();
-        name = in.readString();
-        date = (LocalDate) in.readSerializable();
-        time = (LocalTime) in.readSerializable();
-        eventRepeat = EventRepeat.fromId(in.readInt());
-        eventNotification = EventNotification.fromId(in.readInt());
-        eventColor = in.readInt();
-        localDateEventRepeatFrom = (LocalDate) in.readSerializable();
-        localDateEventRepeatTill = (LocalDate) in.readSerializable();
     }
 
     public EventRepeat getEventRepeat() {

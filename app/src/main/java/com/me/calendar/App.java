@@ -34,7 +34,7 @@ public class App extends Application {
         getSystemService(NotificationManager.class).createNotificationChannel(notificationChannel);
 
 //        if (!NotificationService.isServiceAlarmOn(this)) {
-        NotificationService.setServiceAlarm(this, true);
+//        NotificationService.setServiceAlarm(this, true);
 //        }
     }
 

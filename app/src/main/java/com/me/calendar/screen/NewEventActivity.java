@@ -27,6 +27,7 @@ import com.me.calendar.R;
 import com.me.calendar.repository.model.Event;
 import com.me.calendar.repository.model.EventRepeat;
 import com.me.calendar.repository.model.PaletteColors;
+import com.me.calendar.service.ReminderManager;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -45,6 +46,7 @@ public class NewEventActivity extends EventAbstract {
     private TextView evenTimeTextView;
     private LocalTime time;
     private LocalDate localDate;
+    private ReminderManager reminderManager;
 
     public static Intent newInstance(Context context, LocalDate localDate, LocalTime time) {
         Intent intent = new Intent(context, NewEventActivity.class);
@@ -87,6 +89,8 @@ public class NewEventActivity extends EventAbstract {
         initColorPicker(PaletteColors.Blue);
 
         initAlarm();
+
+        reminderManager = new ReminderManager(this);
     }
 
     @Override
@@ -236,6 +240,7 @@ public class NewEventActivity extends EventAbstract {
         event.setEventNotification(eventNotification);
 
         Event.events.add(event);
+        reminderManager.setReminder(event);
     }
 
 //    public void saveNewEvent(View view) {

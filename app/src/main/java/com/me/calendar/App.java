@@ -6,7 +6,6 @@ import android.app.NotificationManager;
 
 import com.me.calendar.repository.Store;
 import com.me.calendar.repository.dao.EventsDao;
-import com.me.calendar.service.NotificationService;
 
 public class App extends Application {
 
@@ -30,7 +29,7 @@ public class App extends Application {
 
         eventsDao = new EventsDao(appDatabase);
 
-        NotificationChannel notificationChannel = new NotificationChannel(Notification_channel_id, "calendar_channel_name", NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationChannel notificationChannel = new NotificationChannel(Notification_channel_id, "calendar notification channel", NotificationManager.IMPORTANCE_DEFAULT);
         getSystemService(NotificationManager.class).createNotificationChannel(notificationChannel);
 
 //        if (!NotificationService.isServiceAlarmOn(this)) {

@@ -1,14 +1,15 @@
 package com.me.calendar.service;
 
-import android.app.IntentService;
-import android.app.Notification;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.IBinder;
 import android.os.PowerManager;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-public abstract class WakeReminderIntentService extends IntentService {
+public abstract class WakeReminderIntentService extends Service {
 
     abstract void doReminderWork(Intent intent);
 
@@ -28,16 +29,50 @@ public abstract class WakeReminderIntentService extends IntentService {
         return lockStatic;
     }
 
-    public WakeReminderIntentService(String name) {
-        super(name);
+    private static final String TAG_FOREGROUND_SERVICE = "FOREGROUND_SERVICE";
+
+    public static final String ACTION_START_FOREGROUND_SERVICE = "ACTION_START_FOREGROUND_SERVICE";
+
+    public static final String ACTION_STOP_FOREGROUND_SERVICE = "ACTION_STOP_FOREGROUND_SERVICE";
+
+    public static final String ACTION_SNOOZE_FOREGROUND_SERVICE = "ACTION_SNOOZE_FOREGROUND_SERVICE";
+
+    public WakeReminderIntentService() {
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
-        try {
-            doReminderWork(intent);
-        } finally {
-            getLock(this).release();
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null) {
+            String action = intent.getAction();
+            if (action != null)
+                switch (action) {
+                    case ACTION_START_FOREGROUND_SERVICE:
+                        try {
+                            doReminderWork(intent);
+                        } finally {
+                            getLock(this).release();
+                        }
+                        break;
+                    case ACTION_STOP_FOREGROUND_SERVICE:
+                        stopForegroundService();
+                        break;
+                }
         }
+//        return super.onStartCommand(intent, flags, startId);
+        return START_NOT_STICKY;
+    }
+
+    protected void stopForegroundService() {
+        Log.d(TAG_FOREGROUND_SERVICE, "Stop foreground service.");
+
+        // Stop foreground service and remove the notification.
+        stopForeground(false);
+//        stopSelf();
     }
 }

@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import com.me.calendar.ParcelableUtil;
 import com.me.calendar.repository.model.Event;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class ReminderManager {
+
+    public static final String EVENT_EXTRA_KEY = "event";
+
     private Context context;
     private AlarmManager alarmManager;
 
@@ -23,7 +27,8 @@ public class ReminderManager {
 
     public void setReminder(Event event) {
         Intent intent = new Intent(context, OnAlarmReceiver.class);
-//        intent.putExtra("event", event);
+        byte[] bytes = ParcelableUtil.marshall(event);
+        intent.putExtra(EVENT_EXTRA_KEY, bytes);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_MUTABLE);
 

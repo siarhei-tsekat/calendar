@@ -22,11 +22,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 
+import com.me.calendar.App;
 import com.me.calendar.CalendarUtils;
 import com.me.calendar.R;
 import com.me.calendar.repository.model.Event;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Calendar;
 
@@ -41,7 +43,7 @@ public class EditEventActivity extends EventAbstract {
     private TextView evenDateTextView;
     private TextView evenTimeTextView;
     private LocalTime time;
-    private LocalDate localDate;
+    private LocalDateTime localDate;
 
     public static Intent newInstance(Context context, Event event) {
         Intent intent = new Intent(context, EditEventActivity.class);
@@ -62,13 +64,13 @@ public class EditEventActivity extends EventAbstract {
         initWidgets();
 
         editEvent = getIntent().getParcelableExtra(EXTRA_EVENT);
-        localDate = editEvent.getDate();
+        localDate = editEvent.getLocalDateTime();
         eventRepeat = editEvent.getEventRepeat();
-        repeatEventTextView.setText(eventRepeat.getValueName());
+        repeatEventTextView.setText(eventRepeat.getRepeat().getValueName());
         eventNameEditText.setText(editEvent.getName());
-        evenDateTextView.setText(CalendarUtils.formattedDate(editEvent.getDate()));
-        evenTimeTextView.setText(CalendarUtils.formattedTime(editEvent.getTime()));
-        time = editEvent.getTime();
+        evenDateTextView.setText(CalendarUtils.formattedDate(editEvent.getLocalDateTime().toLocalDate()));
+        evenTimeTextView.setText(CalendarUtils.formattedTime(editEvent.getLocalDateTime().toLocalTime()));
+        time = editEvent.getLocalDateTime().toLocalTime();
 
         localDateEventRepeatFrom = editEvent.getLocalDateEventRepeatFrom() != null ?
                 editEvent.getLocalDateEventRepeatFrom() :
@@ -125,9 +127,6 @@ public class EditEventActivity extends EventAbstract {
 
             InputMethodManager imm = (InputMethodManager) EditEventActivity.this.getSystemService(Activity.INPUT_METHOD_SERVICE);
             View view = EditEventActivity.this.getCurrentFocus();
-//            if (view == null) {
-//                view = new View(activity);
-//            }
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
             finish();
@@ -153,8 +152,8 @@ public class EditEventActivity extends EventAbstract {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
-                localDate = LocalDate.of(year, month, day);
-                evenDateTextView.setText(CalendarUtils.formattedDate(localDate));
+                localDate = LocalDateTime.of(year, month, day, 0, 0, 0);
+                evenDateTextView.setText(CalendarUtils.formattedDate(localDate.toLocalDate()));
             }
         };
 
@@ -235,37 +234,19 @@ public class EditEventActivity extends EventAbstract {
     }
 
     private void deleteEvent() {
-        Event.events.removeIf(ev -> ev.getEventId() == editEvent.getEventId());
+        App.getInstance().getEventService().deleteEventById(editEvent.getEventId());
     }
 
     public void saveEvent() {
 
         String eventName = eventNameEditText.getText().toString();
-        editEvent.setDate(localDate);
-        editEvent.setTime(time);
+        editEvent.setLocalDateTime(localDate);
         editEvent.setName(eventName);
         editEvent.setEventRepeat(eventRepeat);
         editEvent.setEventRepeatFrom(localDateEventRepeatFrom);
         editEvent.setEventRepeatTill(localDateEventRepeatTill);
         editEvent.setEventColor(chosenColor);
         editEvent.setEventNotification(eventNotification);
-        Event.events.removeIf(ev -> ev.getEventId() == editEvent.getEventId());
-        Event.events.add(editEvent);
+        App.getInstance().getEventService().updateEvent(editEvent);
     }
-
-//    public void saveNewEvent(View view) {
-//
-//        EventsDao eventsDao = App.getInstance().getEventsDao();
-//
-//        com.me.calendar.model.Event event = new com.me.calendar.model.Event(
-//                dayDetails.getDay(),
-//                dayDetails.getMonth(),
-//                dayDetails.getYear(),
-//                eventNameText.getText().toString(),
-//                Optional.of(eventNoteText.getText().toString()));
-//
-//        eventsDao.addNewEvent(event);
-//
-//        finish();
-//    }
 }

@@ -80,7 +80,7 @@ public class CalendarMonthAdapter extends RecyclerView.Adapter<CalendarMonthView
     }
 
     private List<Event> getAmountEventsForDay(ArrayList<Event> currentEvents, LocalDate currentCalendarDate) {
-        return currentEvents.stream().filter(event -> event.getDate().isEqual(currentCalendarDate)).collect(Collectors.toList());
+        return currentEvents.stream().filter(event -> event.getLocalDateTime().toLocalDate().isEqual(currentCalendarDate)).collect(Collectors.toList());
     }
 
     @Override

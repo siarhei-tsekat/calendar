@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
+import com.me.calendar.App;
 import com.me.calendar.OnItemClickListener;
 import com.me.calendar.R;
 import com.me.calendar.domain.day.DayPagerFragment;
@@ -59,16 +60,13 @@ public class MonthFragment extends Fragment implements OnItemClickListener {
             @Override
             public void onReceive(Context context, Intent intent) {
                 LocalDate localDate = (LocalDate) intent.getSerializableExtra("localDate");
-                calendarMonthAdapter.update(Event.eventsForMonth(localDate));
+                calendarMonthAdapter.update(App.getInstance().getEventService().eventsForMonth(localDate));
 
                 if (isAdded()) {
                     requireActivity().runOnUiThread(() -> {
                         calendarMonthAdapter.notifyDataSetChanged();
                     });
                 }
-//                calendarMonthAdapter.notifyItemChanged(5);
-
-//                RecyclerView.ViewHolder viewHolder = calendarRecycleView.findViewHolderForAdapterPosition(5);
             }
         };
 
@@ -95,7 +93,7 @@ public class MonthFragment extends Fragment implements OnItemClickListener {
 
     private void setMonthView() {
         ArrayList<LocalDate> daysInMonth = daysInMonthArray(localDate);
-        ArrayList<Event> eventsForMonth = Event.eventsForMonth(localDate);
+        ArrayList<Event> eventsForMonth = App.getInstance().getEventService().eventsForMonth(localDate);
         calendarMonthAdapter = new CalendarMonthAdapter(daysInMonth, this, localDate, eventsForMonth);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 7);
 

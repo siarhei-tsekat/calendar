@@ -4,14 +4,15 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 
+import com.me.calendar.repository.EventService;
 import com.me.calendar.repository.Store;
 import com.me.calendar.repository.dao.EventsDao;
+import com.me.calendar.repository.dao.NotificationsDao;
 
 public class App extends Application {
 
     public static final String Notification_channel_id = "calendar_channel_id";
-    private Store appDatabase;
-    private EventsDao eventsDao;
+    private EventService eventService;
 
     private static App instance;
 
@@ -25,19 +26,14 @@ public class App extends Application {
 
         instance = this;
 
-        appDatabase = new Store(getApplicationContext());
-
-        eventsDao = new EventsDao(appDatabase);
+        eventService = new EventService(getApplicationContext());
 
         NotificationChannel notificationChannel = new NotificationChannel(Notification_channel_id, "calendar notification channel", NotificationManager.IMPORTANCE_DEFAULT);
         getSystemService(NotificationManager.class).createNotificationChannel(notificationChannel);
 
-//        if (!NotificationService.isServiceAlarmOn(this)) {
-//        NotificationService.setServiceAlarm(this, true);
-//        }
     }
 
-    public EventsDao getEventsDao() {
-        return eventsDao;
+    public EventService getEventService() {
+        return eventService;
     }
 }

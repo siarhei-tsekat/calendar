@@ -21,6 +21,7 @@ import com.me.calendar.repository.model.EventRepeat;
 import com.me.calendar.repository.model.PaletteColors;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 
 public class EventAbstract extends AppCompatActivity {
@@ -186,27 +187,29 @@ public class EventAbstract extends AppCompatActivity {
     protected void initRepeatWidgets() {
         repeatEventFromTextView.setText(CalendarUtils.formattedDate(localDateEventRepeatFrom));
         repeatEventTillTextView.setText(CalendarUtils.formattedDate(localDateEventRepeatTill));
-        eventPeriodRepeat.setVisibility(eventRepeat == EventRepeat.No ? View.INVISIBLE : View.VISIBLE);
+        eventPeriodRepeat.setVisibility(eventRepeat.getRepeat() == EventRepeat.Repeat.No ? View.INVISIBLE : View.VISIBLE);
     }
 
     protected void showRadioButtonDialog() {
 
         String[] eventRepeatNames = new String[5];
 
-        eventRepeatNames[0] = EventRepeat.No.getValueName();
-        eventRepeatNames[1] = EventRepeat.Every_day.getValueName();
-        eventRepeatNames[2] = EventRepeat.Every_week.getValueName();
-        eventRepeatNames[3] = EventRepeat.Every_month.getValueName();
-        eventRepeatNames[4] = EventRepeat.Every_year.getValueName();
+        eventRepeatNames[0] = EventRepeat.Repeat.No.getValueName();
+        eventRepeatNames[1] = EventRepeat.Repeat.Every_day.getValueName();
+        eventRepeatNames[2] = EventRepeat.Repeat.Every_week.getValueName();
+        eventRepeatNames[3] = EventRepeat.Repeat.Every_month.getValueName();
+        eventRepeatNames[4] = EventRepeat.Repeat.Every_year.getValueName();
 
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
 
         alertBuilder.setSingleChoiceItems(eventRepeatNames, -1, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 repeatEventTextView.setText(eventRepeatNames[item]);
-                eventRepeat = EventRepeat.fromString(eventRepeatNames[item]);
+                LocalDateTime from = CalendarUtils.parseLocaleDateTime(repeatEventFromTextView.getText().toString());
+                LocalDateTime till =  CalendarUtils.parseLocaleDateTime(repeatEventTillTextView.getText().toString());
+                eventRepeat = new EventRepeat(EventRepeat.Repeat.fromString(eventRepeatNames[item]), from, till);
 
-                eventPeriodRepeat.setVisibility(eventRepeat == EventRepeat.No ? View.INVISIBLE : View.VISIBLE);
+                eventPeriodRepeat.setVisibility(eventRepeat.getRepeat() == EventRepeat.Repeat.No ? View.INVISIBLE : View.VISIBLE);
                 dialog.dismiss();
             }
         });

@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
 
+import com.me.calendar.App;
 import com.me.calendar.CalendarUtils;
 import com.me.calendar.R;
 import com.me.calendar.repository.model.Event;
@@ -30,8 +31,10 @@ import com.me.calendar.repository.model.PaletteColors;
 import com.me.calendar.service.ReminderManager;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Calendar;
+import java.util.Date;
 
 public class NewEventActivity extends EventAbstract {
 
@@ -72,8 +75,8 @@ public class NewEventActivity extends EventAbstract {
         time = ((LocalTime) getIntent().getSerializableExtra(EXTRA_LOCAL_TIME));
         evenDateTextView.setText(CalendarUtils.formattedDate(localDate));
         evenTimeTextView.setText(CalendarUtils.formattedTime(time));
-        eventRepeat = EventRepeat.No;
-        repeatEventTextView.setText(eventRepeat.getValueName());
+        eventRepeat = new EventRepeat(EventRepeat.Repeat.No);
+        repeatEventTextView.setText(eventRepeat.getRepeat().getValueName());
 
         localDateEventRepeatFrom = LocalDate.now();
         localDateEventRepeatTill = LocalDate.now();
@@ -231,31 +234,14 @@ public class NewEventActivity extends EventAbstract {
 
     public void saveEvent() {
         String eventName = eventNameEditText.getText().toString();
-        Event event = new Event(System.nanoTime(), eventName, localDate, time, eventRepeat, chosenColor);
-        if (eventRepeat != EventRepeat.No) {
+        Event event = new Event(System.nanoTime(), eventName, LocalDateTime.of(localDate, time), eventRepeat, chosenColor);
+        if (eventRepeat.getRepeat() != EventRepeat.Repeat.No) {
             event.setEventRepeatFrom(localDateEventRepeatFrom);
             event.setEventRepeatTill(localDateEventRepeatTill);
         }
 
         event.setEventNotification(eventNotification);
-
-        Event.events.add(event);
+        App.getInstance().getEventService().addNewEvent(event);
         reminderManager.setReminder(event);
     }
-
-//    public void saveNewEvent(View view) {
-//
-//        EventsDao eventsDao = App.getInstance().getEventsDao();
-//
-//        com.me.calendar.model.Event event = new com.me.calendar.model.Event(
-//                dayDetails.getDay(),
-//                dayDetails.getMonth(),
-//                dayDetails.getYear(),
-//                eventNameText.getText().toString(),
-//                Optional.of(eventNoteText.getText().toString()));
-//
-//        eventsDao.addNewEvent(event);
-//
-//        finish();
-//    }
 }

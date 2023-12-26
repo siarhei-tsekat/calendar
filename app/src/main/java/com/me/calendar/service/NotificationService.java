@@ -7,10 +7,8 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.os.IBinder;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
@@ -23,7 +21,9 @@ import com.me.calendar.repository.model.PaletteColors;
 import com.me.calendar.screen.EditEventActivity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Date;
 
 public class NotificationService extends WakeReminderIntentService {
 
@@ -37,7 +37,7 @@ public class NotificationService extends WakeReminderIntentService {
 
         Resources resources = getResources();
 
-        Intent newInstance = EditEventActivity.newInstance(this, new Event(100L, "fake", LocalDate.now(), LocalTime.now(), EventRepeat.No, PaletteColors.Blue));
+        Intent newInstance = EditEventActivity.newInstance(this, new Event(100L, "fake", LocalDateTime.now(), new EventRepeat(EventRepeat.Repeat.No), PaletteColors.Blue));
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, newInstance, PendingIntent.FLAG_IMMUTABLE);
 
         Intent snoozeIntent = new Intent(this, OnAlarmReceiver.class);
@@ -48,13 +48,13 @@ public class NotificationService extends WakeReminderIntentService {
                 .setTicker(resources.getString(R.string.new_event_title))
                 .setSmallIcon(R.drawable.notification_event)
                 .setContentTitle(resources.getString(R.string.new_event_title))
-                .setContentText(event.getName() + " : " + CalendarUtils.formattedShortTime(event.getTime()))
+                .setContentText(event.getName() + " : " + CalendarUtils.formattedShortTime(event.getLocalDateTime().toLocalTime()))
 //                .setContentText("Hello")
                 .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
                 .setLights(PaletteColors.LightBlue, 5000, 5000)
-                .setTimeoutAfter(30_000L)
+                .setTimeoutAfter(60_000L)
                 .addAction(R.drawable.snooze_btn, "snooze for 10 min", snoozePendingIntent)
                 .build();
 

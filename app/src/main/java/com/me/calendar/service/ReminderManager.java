@@ -34,7 +34,7 @@ public class ReminderManager {
 
         Calendar when = Calendar.getInstance();
 
-        LocalDateTime localDateTime = LocalDateTime.of(event.getDate(), event.getTime());
+        LocalDateTime localDateTime = event.getLocalDateTime();
         ZoneId zoneId = ZoneId.systemDefault();
 
         Date date = Date.from(localDateTime.atZone(zoneId).toInstant());

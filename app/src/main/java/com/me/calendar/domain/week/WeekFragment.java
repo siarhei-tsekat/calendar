@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
+import com.me.calendar.App;
 import com.me.calendar.CalendarUtils;
 import com.me.calendar.OnItemClickListener;
 import com.me.calendar.R;
@@ -35,7 +36,6 @@ import java.util.Map;
 public class WeekFragment extends Fragment implements OnItemClickListener {
 
     private static final String ARG_LOCAL_DATE = "WeekFragment.localDate";
-
 
     private LocalDate localDate;
     private TextView text_day_1;
@@ -79,9 +79,6 @@ public class WeekFragment extends Fragment implements OnItemClickListener {
                         calendarForWeekAdapter.notifyDataSetChanged();
                     });
                 }
-//                calendarMonthAdapter.notifyItemChanged(5);
-
-//                RecyclerView.ViewHolder viewHolder = calendarRecycleView.findViewHolderForAdapterPosition(5);
             }
         };
 
@@ -131,23 +128,6 @@ public class WeekFragment extends Fragment implements OnItemClickListener {
         text_day_6.setText(String.valueOf(days.get(5).getDayOfMonth()));
         text_day_7.setText(String.valueOf(days.get(6).getDayOfMonth()));
 
-
-//        if (currentCalendarDate.getMonth().equals(localDate.getMonth())) {
-//            holder.dayOfMonthTextView.setTextColor(Color.BLACK);
-//            if (currentCalendarDate.equals(currentDate) && LocalDate.now().equals(currentDate)) {
-//                holder.dayOfMonthTextView.setTextColor(Color.rgb(66, 215, 245));
-//            }
-//        } else {
-//            holder.dayOfMonthTextView.setTextColor(Color.LTGRAY);
-//        }
-
-//        ArrayList<Event> eventsForWeek = Event.eventsForWeek(localDate);
-//        WeekDaysAdapter weekDaysAdapter = new WeekDaysAdapter(days, this, localDate, eventsForWeek);
-//        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 7);
-//        weekDaysRecycleView.setLayoutManager(layoutManager);
-//        weekDaysRecycleView.setAdapter(weekDaysAdapter);
-
-
         calendarForWeekAdapter = new CalendarForWeekAdapter(this, hourEventList(), days);
         RecyclerView.LayoutManager layoutManagerForCalendar = new GridLayoutManager(getActivity().getApplicationContext(), 8);
         calendarForWeekRecycleView.setLayoutManager(layoutManagerForCalendar);
@@ -157,8 +137,6 @@ public class WeekFragment extends Fragment implements OnItemClickListener {
     }
 
     private void initWidgets(View view) {
-//        weekDaysRecycleView = view.findViewById(R.id.weekDaysRecyclerView);
-//        monthYearTex = view.findViewById(R.id.monthYearTV);
         text_day_1 = view.findViewById(R.id.week_day_1);
         text_day_2 = view.findViewById(R.id.week_day_2);
         text_day_3 = view.findViewById(R.id.week_day_3);
@@ -182,7 +160,7 @@ public class WeekFragment extends Fragment implements OnItemClickListener {
             LocalTime time = LocalTime.of(hour, 0);
             ArrayList<LocalDate> weekDays = CalendarUtils.daysInWeekArray(localDate);
 
-            ArrayList<Event> events = Event.eventsForWeekAndTime(localDate, time);
+            ArrayList<Event> events = App.getInstance().getEventService().eventsForWeekAndTime(localDate, time);
             Map<LocalDate, List<Event>> eventsDaily = new HashMap<>();
 
             for (LocalDate weekDay : weekDays) {
@@ -190,7 +168,7 @@ public class WeekFragment extends Fragment implements OnItemClickListener {
             }
 
             for (Event event : events) {
-                eventsDaily.get(event.getDate()).add(event);
+                eventsDaily.get(event.getLocalDateTime().toLocalDate()).add(event);
             }
 
             HourWeeklyEvents hourEvent = new HourWeeklyEvents(time, eventsDaily);

@@ -2,6 +2,7 @@ package com.me.calendar;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -92,5 +93,9 @@ public class CalendarUtils {
     public static String formattedShortTime(LocalTime time) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         return time.format(formatter);
+    }
+
+    public static LocalDateTime parseLocaleDateTime(String str) {
+        return LocalDateTime.of(LocalDate.parse(str, DateTimeFormatter.ofPattern("dd MMMM yyyy")), LocalTime.now());
     }
 }

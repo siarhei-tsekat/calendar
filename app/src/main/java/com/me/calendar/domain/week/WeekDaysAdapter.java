@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.me.calendar.repository.model.Event;
 import com.me.calendar.OnItemClickListener;
 import com.me.calendar.R;
+import com.me.calendar.repository.model.Event;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class WeekDaysAdapter extends RecyclerView.Adapter<DaysWeekViewHolder> {
     }
 
     private List<Event> getAmountEventsForDay(ArrayList<Event> currentEvents, LocalDate currentCalendarDate) {
-        return currentEvents.stream().filter(event -> event.getDate().isEqual(currentCalendarDate)).collect(Collectors.toList());
+        return currentEvents.stream().filter(event -> event.getLocalDateTime().toLocalDate().isEqual(currentCalendarDate)).collect(Collectors.toList());
     }
 
 

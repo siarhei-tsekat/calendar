@@ -3,108 +3,10 @@ package com.me.calendar.repository.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.me.calendar.repository.model.EventNotification;
-import com.me.calendar.repository.model.EventRepeat;
-
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Month;
-import java.time.temporal.WeekFields;
-import java.util.ArrayList;
-import java.util.Locale;
+import java.time.LocalDateTime;
 
 public class Event implements Parcelable {
-
-    public static ArrayList<Event> events = new ArrayList<>();
-
-    public static ArrayList<Event> eventsForDate(LocalDate date) {
-        ArrayList<Event> dayEvents = new ArrayList<>();
-
-        for (Event event : events) {
-            if (event.getDate().equals(date)) {
-                dayEvents.add(event);
-            }
-        }
-        return dayEvents;
-    }
-
-    public static ArrayList<Event> eventsForWeekAndTime(LocalDate date, LocalTime time) {
-        ArrayList<Event> dayEvents = new ArrayList<>();
-
-        for (Event event : events) {
-
-            int eventHour = event.time.getHour();
-            int cellHour = time.getHour();
-            int year = date.getYear();
-            Month month = date.getMonth();
-            boolean belongToCurrentWeek = inCurrentWeek(date, event.getDate());
-
-            if (event.getDate().getYear() == year &&
-                    event.getDate().getMonth().equals(month) &&
-                    eventHour == cellHour &&
-                    belongToCurrentWeek) {
-                dayEvents.add(event);
-            }
-        }
-        return dayEvents;
-    }
-
-    private static boolean inCurrentWeek(LocalDate date, LocalDate eventDate) {
-
-        int dayOfMonth_a = date.getDayOfMonth();
-        int dayOfMonth_b = eventDate.getDayOfMonth();
-
-        if (Math.abs(dayOfMonth_a - dayOfMonth_b) > 7) return false;
-
-        int weekOfYear_a = date.get(WeekFields.of(Locale.getDefault()).weekOfYear());
-        int weekOfYear_b = eventDate.get(WeekFields.of(Locale.getDefault()).weekOfYear());
-
-        return weekOfYear_a == weekOfYear_b;
-    }
-
-    public static ArrayList<Event> eventsForMonth(LocalDate date) {
-        ArrayList<Event> dayEvents = new ArrayList<>();
-
-        int year = date.getYear();
-        Month month = date.getMonth();
-
-        for (Event event : events) {
-            if (event.getDate().getYear() == year && event.getDate().getMonth().equals(month)) {
-                dayEvents.add(event);
-            }
-        }
-        return dayEvents;
-    }
-
-    // fix me
-    public static ArrayList<Event> eventsForWeek(LocalDate date) {
-        ArrayList<Event> dayEvents = new ArrayList<>();
-
-        int year = date.getYear();
-        Month month = date.getMonth();
-
-        for (Event event : events) {
-            if (event.getDate().getYear() == year && event.getDate().getMonth().equals(month)) {
-                dayEvents.add(event);
-            }
-        }
-        return dayEvents;
-    }
-
-    public static ArrayList<Event> eventsForDateAndTime(LocalDate date, LocalTime time) {
-        ArrayList<Event> dayEvents = new ArrayList<>();
-
-        for (Event event : events) {
-
-            int eventHour = event.time.getHour();
-            int cellHour = time.getHour();
-
-            if (event.getDate().equals(date) && eventHour == cellHour) {
-                dayEvents.add(event);
-            }
-        }
-        return dayEvents;
-    }
 
     public static final Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
 
@@ -122,11 +24,10 @@ public class Event implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
+        dest.writeParcelable(eventRepeat, flags);
         dest.writeLong(eventId);
         dest.writeString(name);
-        dest.writeSerializable(date);
-        dest.writeSerializable(time);
-        dest.writeInt(eventRepeat.getId());
+        dest.writeSerializable(localDateTime);
         dest.writeInt(eventNotification.getId());
         dest.writeInt(eventColor);
         dest.writeSerializable(localDateEventRepeatFrom);
@@ -139,11 +40,10 @@ public class Event implements Parcelable {
     }
 
     public Event(Parcel in) {
+        eventRepeat = in.readParcelable(EventRepeat.class.getClassLoader());
         eventId = in.readLong();
         name = in.readString();
-        date = (LocalDate) in.readSerializable();
-        time = (LocalTime) in.readSerializable();
-        eventRepeat = EventRepeat.fromId(in.readInt());
+        localDateTime = (LocalDateTime) in.readSerializable();
         eventNotification = EventNotification.fromId(in.readInt());
         eventColor = in.readInt();
         localDateEventRepeatFrom = (LocalDate) in.readSerializable();
@@ -152,26 +52,24 @@ public class Event implements Parcelable {
 
     private long eventId;
     private String name;
-    private LocalDate date;
-    private LocalTime time;
+    private LocalDateTime localDateTime;
     private EventRepeat eventRepeat;
     private EventNotification eventNotification;
     protected LocalDate localDateEventRepeatFrom = LocalDate.now();
     protected LocalDate localDateEventRepeatTill = LocalDate.now();
     protected int eventColor;
 
-    public Event(long eventId, String name, LocalDate date, LocalTime time, EventRepeat eventRepeat, int eventColor) {
+    public Event(long eventId, String name, LocalDateTime localDateTime, EventRepeat eventRepeat, int eventColor) {
         this.eventId = eventId;
         this.name = name;
-        this.date = date;
-        this.time = time;
+        this.localDateTime = localDateTime;
         this.eventRepeat = eventRepeat;
         this.eventColor = eventColor;
         this.eventNotification = EventNotification.alarm_no;
     }
 
-    public void setEventRepeat(EventRepeat eventRepeat) {
-        this.eventRepeat = eventRepeat;
+    public void setEventRepeat(EventRepeat repeat) {
+        this.eventRepeat = repeat;
     }
 
     public long getEventId() {
@@ -186,16 +84,12 @@ public class Event implements Parcelable {
         this.name = name;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public LocalTime getTime() {
-        return time;
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
     }
 
     public void setEventColor(int eventColor) {
@@ -204,10 +98,6 @@ public class Event implements Parcelable {
 
     public int getEventColor() {
         return eventColor;
-    }
-
-    public void setTime(LocalTime time) {
-        this.time = time;
     }
 
     public EventRepeat getEventRepeat() {

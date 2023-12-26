@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.me.calendar.App;
 import com.me.calendar.CalendarUtils;
 import com.me.calendar.repository.model.Event;
 import com.me.calendar.repository.model.HourEvent;
@@ -56,10 +57,6 @@ public class DayFragment extends Fragment implements AdapterView.OnItemClickList
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_day, container, false);
-//        getActivity().setTitle(CalendarUtils.monthDayFromDate(localDate));
-//        Toolbar myToolbar = view.findViewById(R.id.edit_event_toolbar);
-//        setSupportActionBar(myToolbar);
-
         initWidgets(view);
         return view;
     }
@@ -111,7 +108,7 @@ public class DayFragment extends Fragment implements AdapterView.OnItemClickList
         for (int hour = 0; hour < 24; hour++) {
 
             LocalTime time = LocalTime.of(hour, 0);
-            ArrayList<Event> events = Event.eventsForDateAndTime(localDate, time);
+            ArrayList<Event> events = App.getInstance().getEventService().eventsForDateAndTime(localDate, time);
             HourEvent hourEvent = new HourEvent(time, events);
             list.add(hourEvent);
         }
